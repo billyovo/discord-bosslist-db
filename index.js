@@ -129,7 +129,10 @@ bot.on('message', msg => {
           if(err){
               return console.log(err);
           }
-            msg.channel.send(fetchEmote(data.toString()));
+            fetchEmote(data.toString())
+            .then(ret => {
+              msg.channel.send(ret);
+            });
         });
        }
 
