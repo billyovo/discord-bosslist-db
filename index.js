@@ -5,6 +5,12 @@ const bot = new Discord.Client();
 const TOKEN = process.env.TOKEN;
 const PREFIX = "-";
 
+var CronJob = require('cron').CronJob;
+var job = new CronJob('0 0 * * MON', function() {
+  sendBossMessage();
+}, null, true, 'Asia/Taipei');
+job.start();
+
 bot.login(TOKEN);
 
 bot.on('ready', () => {
@@ -72,15 +78,9 @@ async function fetchEmote(ID){
 return JSON.stringify(data);
 }
 
-bot.on('message', msg => {
-
-   if(msg.content.startsWith(PREFIX)){
-     if(!msg.author.bot){
-     var command = msg.content.slice(1,msg.content.length);
-     switch(command){
-       case "boss":{
-         msg.delete();
-          var bossMessage = "@everyone 新的一周開始了!!\r\n";
+function sendBossMessage(){
+      let bossChannel = bot.channels.cache.get("728568879302836275");
+      var bossMessage = "@everyone 新的一周兩小時後開始了!!\r\n";
           bossMessage += "請給反應你要哪隻boss~\r\n";
           bossMessage += "🇦 : 寒冰魔女\r\n";
           bossMessage += "🇧 : 森法王\r\n";
@@ -89,7 +89,18 @@ bot.on('message', msg => {
           bossMessage += "🇪 : 元素魔方\r\n";
           bossMessage += "🇫 : 幻雪守衛\r\n";
           bossMessage += "🇬 : 荒漠亡靈\r\n";
-          msg.channel.send(bossMessage)
+
+          fs.readFile('messageID.txt', function(err, data) {
+            if(err){
+                return console.log(err);
+            }
+            bossChannel.messages.fetch(data.toString())
+            .then(async(message)=>{
+              message.unpin();
+          })
+        });
+
+          bossChannel.send(bossMessage)
           .then(async function(message){
             await message.react("🇦");
             await message.react("🇧");
@@ -98,16 +109,36 @@ bot.on('message', msg => {
             await message.react("🇪");
             await message.react("🇫");
             await message.react("🇬");
-          })
-       }
-         
-     }
+            await message.pin();
+            fs.writeFile('messageID.txt', message.id, function (err) {
+              if (err)
+                  console.log(err);
 
-     }
+          });
+        })
+         
+}
+bot.on('message', msg => {
+
+   if(msg.content.startsWith(PREFIX)){
+     if(!msg.author.bot){
+     var command = msg.content.slice(1,msg.content.length);
+     switch(command){
+       case "boss":{
+        fs.readFile('messageID.txt', function(err, data) {
+          if(err){
+              return console.log(err);
+          }
+            msg.channel.send(fetchEmote(data.toString()));
+        });
+       }
+
+      }
+    }
   }
 });
 
-
+/*
 const http = require("http");
 const host = 'localhost';
 const port = 8080;
@@ -134,3 +165,4 @@ server.listen(port, host, () => {
     console.log(`HTTP Server is running on http://${host}:${port}`);
 });
 
+*/
