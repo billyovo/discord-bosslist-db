@@ -1,10 +1,12 @@
 require('dotenv').config();
+const config = require('./config.json.');
+
 const Discord = require('discord.js');
 const fs = require('fs');
 const bot = new Discord.Client();
 const TOKEN = process.env.TOKEN;
-const PREFIX = "-";
-const bossChannelID = "728568879302836275";
+const PREFIX = config.prefix;
+const bossChannelID = config.bossChannelID;
 
 //'0 0 * * MON'
 var CronJob = require('cron').CronJob;
@@ -17,6 +19,13 @@ bot.login(TOKEN);
 
 bot.on('ready', () => {
   console.info("Discord SiuMui online");
+  try{
+    bot.channels.cache.get(bossChannelID);
+  }
+  catch(error){
+    console.log("Boss channel is not found! Fix your config.");
+    bot.destroy();
+  }
 });
 
 async function fetchEmote(ID){
@@ -75,6 +84,7 @@ async function fetchEmote(ID){
 
 function sendBossMessage(){
   let bossChannel = bot.channels.cache.get(bossChannelID);
+
   let bossMessage = "@everyone 新的一周開始了!!\r\n";
       bossMessage += "請給反應你要哪隻boss~\r\n";
       bossMessage += "🇦 : 寒冰魔女\r\n";
@@ -110,6 +120,11 @@ function sendBossMessage(){
         });
       })
     })
+    .catch(error=>{
+      console.log(error);
+      bossChannel.send("Something went wrong!");
+    })
+
   });
 
   
