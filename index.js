@@ -1,5 +1,5 @@
 require('dotenv').config();
-const config = require('./config.json');
+const config = require('./config.json.');
 
 const Discord = require('discord.js');
 const fs = require('fs');
@@ -19,13 +19,12 @@ bot.login(TOKEN);
 
 bot.on('ready', () => {
   console.info("Discord SiuMui online");
-  try{
-    bot.channels.cache.get(bossChannelID);
-  }
-  catch(error){
-    console.log("Boss channel is not found! Fix your config.");
-    bot.destroy();
-  }
+    let testFetch = bot.channels.cache.get(bossChannelID);
+    if(testFetch === undefined){
+      console.log("Boss channel is not found! Fix your config.");
+      bot.destroy();
+    }
+  
 });
 
 async function fetchEmote(ID){
