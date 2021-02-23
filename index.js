@@ -152,6 +152,15 @@ bot.on('message', msg => {
         });
       });
     }
+      
+    case "message":{
+      if(msg.author.hasPermission('ADMINISTRATOR')) {
+        sendBossMessage();
+      }
+      else{
+        msg.channel.send("No permission!");
+      }
+    }  
 
 
   }
