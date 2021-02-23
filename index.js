@@ -8,7 +8,7 @@ const bossChannelID = "728568879302836275";
 
 //'0 0 * * MON'
 var CronJob = require('cron').CronJob;
-var job = new CronJob('0 * * * TUE', function() {
+var job = new CronJob('*/15 * * * *', function() {
   sendBossMessage();
 }, null, true, 'Asia/Taipei');
 
@@ -73,7 +73,7 @@ async function fetchEmote(ID){
   return JSON.stringify(data);
 }
 
-function sendBossMessage(){
+async function sendBossMessage(){
   let bossChannel = bot.channels.cache.get(bossChannelID);
   let bossMessage = "@everyone 新的一周開始了!!\r\n";
       bossMessage += "請給反應你要哪隻boss~\r\n";
@@ -89,13 +89,13 @@ function sendBossMessage(){
     if(err){
       return console.log(err);
     }
-    bossChannel.messages.fetch(data.toString())
+    await bossChannel.messages.fetch(data.toString())
     .then(async(message)=>{
       message.unpin();
     })
   });
 
-  bossChannel.send(bossMessage)
+  await bossChannel.send(bossMessage)
   .then(async function(message){
     await message.react("🇦");
     await message.react("🇧");
