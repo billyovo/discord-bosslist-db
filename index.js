@@ -136,7 +136,7 @@ bot.on('message', msg => {
   if(!msg.content.startsWith(PREFIX)){return;}
   if(msg.author.bot){return;}
 
-  let command = msg.content.slice(1,msg.content.length);
+  let command = msg.content.slice(PREFIX.length,msg.content.length);
     
   switch(command){
 
