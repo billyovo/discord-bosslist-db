@@ -8,7 +8,7 @@ const bossChannelID = "728568879302836275";
 
 //'0 0 * * MON'
 var CronJob = require('cron').CronJob;
-var job = new CronJob('*/15 * * * *', function() {
+var job = new CronJob('*/5 * * * *', function() {
   sendBossMessage();
 }, null, true, 'Asia/Taipei');
 
@@ -73,7 +73,7 @@ async function fetchEmote(ID){
   return JSON.stringify(data);
 }
 
-async function sendBossMessage(){
+function sendBossMessage(){
   let bossChannel = bot.channels.cache.get(bossChannelID);
   let bossMessage = "@everyone 新的一周開始了!!\r\n";
       bossMessage += "請給反應你要哪隻boss~\r\n";
@@ -89,28 +89,31 @@ async function sendBossMessage(){
     if(err){
       return console.log(err);
     }
-    await bossChannel.messages.fetch(data.toString())
-    .then(async(message)=>{
-      message.unpin();
+    bossChannel.messages.fetch(data.toString())
+    .then(async (message)=>{
+      await message.unpin();
+
+      await bossChannel.send(bossMessage)
+      .then(async function(Newmessage){
+        await Newmessage.pin();
+        await Newmessage.react("🇦");
+        await Newmessage.react("🇧");
+        await Newmessage.react("🇨");
+        await Newmessage.react("🇩");
+        await Newmessage.react("🇪");
+        await Newmessage.react("🇫");
+        await Newmessage.react("🇬");
+        fs.writeFile('messageID.txt', Newmessage.id, function (err) {
+          if (err){
+            console.log(err);
+          }
+        });
+      })
     })
   });
 
-  await bossChannel.send(bossMessage)
-  .then(async function(message){
-    await message.react("🇦");
-    await message.react("🇧");
-    await message.react("🇨");
-    await message.react("🇩");
-    await message.react("🇪");
-    await message.react("🇫");
-    await message.react("🇬");
-    await message.pin();
-    fs.writeFile('messageID.txt', message.id, function (err) {
-      if (err){
-        console.log(err);
-      }
-    });
-  })
+  
+  
          
 }
 
