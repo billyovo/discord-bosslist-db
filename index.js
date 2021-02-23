@@ -81,7 +81,7 @@ return JSON.stringify(data);
 
 function sendBossMessage(){
       let bossChannel = bot.channels.cache.get("728568879302836275");
-      var bossMessage = "@everyone 新的一周兩小時後開始了!!\r\n";
+      var bossMessage = "@everyone 新的一周開始了!!\r\n";
           bossMessage += "請給反應你要哪隻boss~\r\n";
           bossMessage += "🇦 : 寒冰魔女\r\n";
           bossMessage += "🇧 : 森法王\r\n";
