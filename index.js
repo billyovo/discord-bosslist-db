@@ -8,7 +8,7 @@ const bossChannelID = "728568879302836275";
 
 //'0 0 * * MON'
 var CronJob = require('cron').CronJob;
-var job = new CronJob('*/5 * * * *', function() {
+var job = new CronJob('0 0 * * MON', function() {
   sendBossMessage();
 }, null, true, 'Asia/Taipei');
 
@@ -139,8 +139,8 @@ bot.on('message', msg => {
       });
     }
 
+
   }
-  
 });
 
 /*
