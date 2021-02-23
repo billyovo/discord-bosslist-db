@@ -7,7 +7,7 @@ const PREFIX = "-";
 
 var CronJob = require('cron').CronJob;
 //0 0 * * MON
-var job = new CronJob('* 0 * * TUE', function() {
+var job = new CronJob('0 * * * TUE', function() {
   sendBossMessage();
 }, null, true, 'Asia/Taipei');
 job.start();
