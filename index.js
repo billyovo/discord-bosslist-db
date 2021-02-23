@@ -4,22 +4,23 @@ const fs = require('fs');
 const bot = new Discord.Client();
 const TOKEN = process.env.TOKEN;
 const PREFIX = "-";
+const bossChannelID = "728568879302836275";
 
+//'0 0 * * MON'
 var CronJob = require('cron').CronJob;
-//0 0 * * MON
 var job = new CronJob('0 * * * TUE', function() {
   sendBossMessage();
 }, null, true, 'Asia/Taipei');
-job.start();
 
+job.start();
 bot.login(TOKEN);
 
 bot.on('ready', () => {
-    console.info("Discord SiuMui online");
-  });
+  console.info("Discord SiuMui online");
+});
 
 async function fetchEmote(ID){
-  var data = {
+  let data = {
       "A":[],
       "B":[],
       "C":[],
@@ -27,119 +28,116 @@ async function fetchEmote(ID){
       "E":[],
       "F":[],
       "G":[],
-    }
+  }
 
-  let bossChannel = bot.channels.cache.get("728568879302836275");
+  let bossChannel = bot.channels.cache.get(bossChannelID);
   await bossChannel.messages.fetch(ID)
   .then(async(message)=>{
 
    await message.reactions.resolve("🇦").users.fetch()
    .then(userList=>{
-    userList = userList.filter(user=>!user.bot);
-    data.A = userList.map(user=>user.username);
-   })
+    data.A = userList.filter(user=>!user.bot).map(user=>user.username);
+    })
 
    await message.reactions.resolve("🇧").users.fetch()
    .then(userList=>{
-    userList = userList.filter(user=>!user.bot);
-    data.B = userList.map(user=>user.username);
+    data.B = userList.filter(user=>!user.bot).map(user=>user.username);
    })
 
    await message.reactions.resolve("🇨").users.fetch()
    .then(userList=>{
-    userList = userList.filter(user=>!user.bot);
-    data.C = userList.map(user=>user.username);
+    data.C = userList.filter(user=>!user.bot).map(user=>user.username);
    })
 
    await message.reactions.resolve("🇩").users.fetch()
    .then(userList=>{
-    userList = userList.filter(user=>!user.bot);
-    data.D = userList.map(user=>user.username);
+    data.D = userList.filter(user=>!user.bot).map(user=>user.username);
    })
 
   await message.reactions.resolve("🇪").users.fetch()
    .then(userList=>{
-    userList = userList.filter(user=>!user.bot);
-    data.E = userList.map(user=>user.username);
+    data.E = userList.filter(user=>!user.bot).map(user=>user.username);
    })
 
    await message.reactions.resolve("🇫").users.fetch()
    .then(userList=>{
-    userList = userList.filter(user=>!user.bot);
-    data.F = userList.map(user=>user.username);
+    data.F = userList.filter(user=>!user.bot).map(user=>user.username);
    })
 
    await message.reactions.resolve("🇬").users.fetch()
    .then(userList=>{
-    userList = userList.filter(user=>!user.bot);
-    data.G = userList.map(user=>user.username);
+    data.G = userList.filter(user=>!user.bot).map(user=>user.username);
    })
  })
 
-return JSON.stringify(data);
+  return JSON.stringify(data);
 }
 
 function sendBossMessage(){
-      let bossChannel = bot.channels.cache.get("728568879302836275");
-      var bossMessage = "@everyone 新的一周開始了!!\r\n";
-          bossMessage += "請給反應你要哪隻boss~\r\n";
-          bossMessage += "🇦 : 寒冰魔女\r\n";
-          bossMessage += "🇧 : 森法王\r\n";
-          bossMessage += "🇨 : 夢魘虛影\r\n";
-          bossMessage += "🇩 : 淵海噬者\r\n";
-          bossMessage += "🇪 : 元素魔方\r\n";
-          bossMessage += "🇫 : 幻雪守衛\r\n";
-          bossMessage += "🇬 : 荒漠亡靈\r\n";
+  let bossChannel = bot.channels.cache.get(bossChannelID);
+  let bossMessage = "@everyone 新的一周開始了!!\r\n";
+      bossMessage += "請給反應你要哪隻boss~\r\n";
+      bossMessage += "🇦 : 寒冰魔女\r\n";
+      bossMessage += "🇧 : 森法王\r\n";
+      bossMessage += "🇨 : 夢魘虛影\r\n";
+      bossMessage += "🇩 : 淵海噬者\r\n";
+      bossMessage += "🇪 : 元素魔方\r\n";
+      bossMessage += "🇫 : 幻雪守衛\r\n";
+      bossMessage += "🇬 : 荒漠亡靈\r\n";
 
-          fs.readFile('messageID.txt', function(err, data) {
-            if(err){
-                return console.log(err);
-            }
-            bossChannel.messages.fetch(data.toString())
-            .then(async(message)=>{
-              message.unpin();
-          })
-        });
+  fs.readFile('messageID.txt', function(err, data){
+    if(err){
+      return console.log(err);
+    }
+    bossChannel.messages.fetch(data.toString())
+    .then(async(message)=>{
+      message.unpin();
+    })
+  });
 
-          bossChannel.send(bossMessage)
-          .then(async function(message){
-            await message.react("🇦");
-            await message.react("🇧");
-            await message.react("🇨");
-            await message.react("🇩");
-            await message.react("🇪");
-            await message.react("🇫");
-            await message.react("🇬");
-            await message.pin();
-            fs.writeFile('messageID.txt', message.id, function (err) {
-              if (err)
-                  console.log(err);
-
-          });
-        })
+  bossChannel.send(bossMessage)
+  .then(async function(message){
+    await message.react("🇦");
+    await message.react("🇧");
+    await message.react("🇨");
+    await message.react("🇩");
+    await message.react("🇪");
+    await message.react("🇫");
+    await message.react("🇬");
+    await message.pin();
+    fs.writeFile('messageID.txt', message.id, function (err) {
+      if (err){
+        console.log(err);
+      }
+    });
+  })
          
 }
+
 bot.on('message', msg => {
 
-   if(msg.content.startsWith(PREFIX)){
-     if(!msg.author.bot){
-     var command = msg.content.slice(1,msg.content.length);
-     switch(command){
-       case "boss":{
-        fs.readFile('messageID.txt', function(err, data) {
-          if(err){
-              return console.log(err);
-          }
-            fetchEmote(data.toString())
-            .then(ret => {
-              msg.channel.send(ret);
-            });
-        });
-       }
+  if(!msg.content.startsWith(PREFIX)){return;}
+  if(msg.author.bot){return;}
 
-      }
+  let command = msg.content.slice(1,msg.content.length);
+    
+  switch(command){
+
+    case "boss":{
+      fs.readFile('messageID.txt', function(err, data) {
+        if(err){
+          return console.log(err);
+        }
+
+        fetchEmote(data.toString())
+        .then(ret => {
+          msg.channel.send(ret);
+        });
+      });
     }
+
   }
+  
 });
 
 /*
