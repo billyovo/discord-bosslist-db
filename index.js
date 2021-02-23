@@ -6,7 +6,8 @@ const TOKEN = process.env.TOKEN;
 const PREFIX = "-";
 
 var CronJob = require('cron').CronJob;
-var job = new CronJob('0 0 * * MON', function() {
+//0 0 * * MON
+var job = new CronJob('* 0 * * TUE', function() {
   sendBossMessage();
 }, null, true, 'Asia/Taipei');
 job.start();
