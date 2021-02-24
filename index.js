@@ -19,15 +19,30 @@ bot.login(TOKEN);
 
 bot.on('ready', () => {
   console.info("Discord SiuMui online");
-    let testFetch = bot.channels.cache.get(bossChannelID);
+    let testFetch = fetchBossChannel();
     if(testFetch === undefined){
       console.log("Boss channel is not found! Fix your config.");
       bot.destroy();
     }
-  
 });
 
-async function fetchEmote(ID){
+function fetchBossChannel(){
+  return bot.channels.cache.get(bossChannelID);
+}
+
+async function fetchBossMessage(){
+  let bossChannel = await fetchBossChannel();
+  await bossChannel.messages.fetchPinned()
+  .then((messages)=>{
+    return messages.filter(message => message.author === bot.user).first();
+  })
+  .catch(error=>{
+    bossChannel.send("No old boss message found!");
+    return null;
+  })
+}
+
+async function fetchEmote(){
   let data = {
       "A":[],
       "B":[],
@@ -38,9 +53,8 @@ async function fetchEmote(ID){
       "G":[],
   }
 
-  let bossChannel = bot.channels.cache.get(bossChannelID);
-  await bossChannel.messages.fetch(ID)
-  .then(async(message)=>{
+  let message = fetchBossMessage()
+  .then(async()=>{
 
    await message.reactions.resolve("🇦").users.fetch()
    .then(userList=>{
@@ -77,14 +91,18 @@ async function fetchEmote(ID){
     data.G = userList.filter(user=>!user.bot).map(user=>user.username);
    })
  })
+ .catch(error=>{
+    return;
+ })
 
   return JSON.stringify(data);
 }
 
-function sendBossMessage(){
-  let bossChannel = bot.channels.cache.get(bossChannelID);
+async function sendBossMessage(){
+  let bossChannel = await fetchBossChannel();
+  let oldBossMessage = await fetchBossMessage();
 
-  let bossMessage = "@everyone 新的一周開始了!!\r\n";
+  let bossMessage  = "@everyone 新的一周開始了!!\r\n";
       bossMessage += "請給反應你要哪隻boss~\r\n";
       bossMessage += "🇦 : 寒冰魔女\r\n";
       bossMessage += "🇧 : 森法王\r\n";
@@ -94,41 +112,19 @@ function sendBossMessage(){
       bossMessage += "🇫 : 幻雪守衛\r\n";
       bossMessage += "🇬 : 荒漠亡靈\r\n";
 
-  fs.readFile('messageID.txt', function(err, data){
-    if(err){
-      return console.log(err);
-    }
-    bossChannel.messages.fetch(data.toString())
-    .then(async (message)=>{
-      await message.unpin();
-
-      await bossChannel.send(bossMessage)
-      .then(async function(Newmessage){
-        await Newmessage.pin();
-        await Newmessage.react("🇦");
-        await Newmessage.react("🇧");
-        await Newmessage.react("🇨");
-        await Newmessage.react("🇩");
-        await Newmessage.react("🇪");
-        await Newmessage.react("🇫");
-        await Newmessage.react("🇬");
-        fs.writeFile('messageID.txt', Newmessage.id, function (err) {
-          if (err){
-            console.log(err);
-          }
-        });
-      })
-    })
-    .catch(error=>{
-      console.log(error);
-      bossChannel.send("Something went wrong!");
-    })
-
-  });
-
-  
-  
-         
+    console.log(oldBossMessage.content);
+    await oldBossMessage.unpin();
+    await bossChannel.send(bossMessage)
+      .then(async(newMessage)=>{
+        await newMessage.pin();
+        await newMessage.react("🇦");
+        await newMessage.react("🇧");
+        await newMessage.react("🇨");
+        await newMessage.react("🇩");
+        await newMessage.react("🇪");
+        await newMessage.react("🇫");
+        await newMessage.react("🇬");
+      })         
 }
 
 bot.on('message', msg => {
@@ -141,21 +137,15 @@ bot.on('message', msg => {
   switch(command){
 
     case "boss":{
-      fs.readFile('messageID.txt', function(err, data) {
-        if(err){
-          return console.log(err);
-        }
-
-        fetchEmote(data.toString())
+        fetchEmote()
         .then(ret => {
           msg.channel.send(ret);
         });
-      });
       break;
     }
 
     case "message":{
-      if(msg.member.hasPermission('ADMINISTRATOR')){
+      if(msg.member.hasPermission('ADMINISTRATOR')|| msg.author===bot.owner){
         sendBossMessage();
       }
       else{
