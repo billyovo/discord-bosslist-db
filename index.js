@@ -30,24 +30,15 @@ bot.on('ready', () => {
 });
 
 function fetchBossChannel(){
-  return new Promise((resolve, reject) => {
-      let bossChannel = bot.channels.cache.get(bossChannelID);
-      (bossChannel !== undefined)? resolve(bossChannel) : reject(new Error());
-  });
+  return bot.channels.cache.get(bossChannelID);
 }
 
 async function fetchBossMessage(){
-  fetchBossChannel()
-  .then(bossChannel=>{
-    bossChannel.messages.fetchPinned()
-    .then((messages)=>{
-      bossChannel.send("message id is : "+messages.filter(message => message.author === bot.user).first().id);
-      return messages.filter(message => message.author === bot.user).first();
-    })
-  .catch(error=>{
-    bossChannel.send("No old boss message found!");
-    return error;
-  })
+  let bossChannel = fetchBossChannel();
+  bossChannel.messages.fetchPinned()
+  .then((messages)=>{
+    bossChannel.send("message id is : "+messages.filter(message => message.author === bot.user).first().id);
+    return messages.filter(message => message.author === bot.user).first();
   })
 }
 
@@ -100,6 +91,7 @@ async function fetchEmote(){
     data.G = userList.filter(user=>!user.bot).map(user=>user.username);
    })
  })
+
 
 return JSON.stringify(data);
  
