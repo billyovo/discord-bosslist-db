@@ -51,7 +51,7 @@ async function fetchEmote(){
       "G":[],
   }
   let msg;
-  await fetchBossMessage()
+  return fetchBossMessage()
   .then(async(message)=>{
    msg = message;
    await message.reactions.resolve("🇦").users.fetch()
@@ -89,7 +89,7 @@ async function fetchEmote(){
     data.G = userList.filter(user=>!user.bot).map(user=>user.username);
    })
  })
- .finally((message)=>{
+ .finally(()=>{
    const embed = new Discord.MessageEmbed()
    .setColor('#ffff00')
    .setTitle('Boss statistics')
