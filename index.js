@@ -21,7 +21,7 @@ bot.on('ready', () => {
   console.info("Discord SiuMui online");
     let bossChannel = fetchBossChannel();
     if(bossChannel!==undefined){
-      console.log("Successful found channel "+channel.name);
+      console.log("Successful found channel "+bossChannel.name);
     }
     else{
       console.log("Boss channel is not found! Fix your config.");
