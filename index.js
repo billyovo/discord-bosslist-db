@@ -159,7 +159,10 @@ bot.on('message', msg => {
     case "ping":{
        const embed = new Discord.MessageEmbed()
        .setColor('#ffff00')
-       .setDescription('Pong, '+bot.ws.ping+"ms")
+       .setDescription('Pong')
+       .addFields(
+        { name: '\u200b', value: '+bot.ws.ping+"ms"' },
+        }
        msg.channel.send(embed);
       break;
     }
