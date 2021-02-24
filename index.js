@@ -35,15 +35,10 @@ function fetchBossChannel(){
 
 async function fetchBossMessage(){
   let bossChannel = fetchBossChannel();
-  return bossChannel.messages.fetchPinned()
-  .then((messages)=>{
-    let messageID = messages.filter(message => message.author === bot.user).first().id;
-    return bossChannel.messages.fetch(messageID)
-    .then(message=>{
-      bossChannel.send("message id: "+ message.id);
-      return message;
-    })
-  })
+  let messages = await bossChannel.messages.fetchPinned();
+  let bossMessage = await bossChannel.messages.fetch(messages.filter(message => message.author === bot.user).first().id);
+  bossChannel.send("Message id is : "+bossMessage.id);
+  return bossMessage;
 }
 
 async function fetchEmote(){
