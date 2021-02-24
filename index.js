@@ -59,7 +59,7 @@ async function fetchEmote(){
       "G":[],
   }
 
-  let message = await fetchBossMessage()
+  fetchBossMessage()
   .then(async(message)=>{
 
    await message.reactions.resolve("🇦").users.fetch()
