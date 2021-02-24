@@ -27,7 +27,10 @@ bot.on('ready', () => {
 });
 
 function fetchBossChannel(){
-  return bot.channels.cache.get(bossChannelID);
+  return new Promise((resolve, reject) => {
+      let bossChannel = bot.channels.cache.get(bossChannelID);
+      (bossChannel === undefined)? resolve(bossChannel) : reject(new Error());
+  });
 }
 
 async function fetchBossMessage(){
@@ -38,7 +41,7 @@ async function fetchBossMessage(){
   })
   .catch(error=>{
     bossChannel.send("No old boss message found!");
-    return null;
+    return error;
   })
 }
 
@@ -53,7 +56,7 @@ async function fetchEmote(){
       "G":[],
   }
 
-  let message = fetchBossMessage()
+  let message = await fetchBossMessage()
   .then(async()=>{
 
    await message.reactions.resolve("🇦").users.fetch()
@@ -92,7 +95,7 @@ async function fetchEmote(){
    })
  })
  .catch(error=>{
-    return;
+    return error;
  })
 
   return JSON.stringify(data);
@@ -145,7 +148,7 @@ bot.on('message', msg => {
     }
 
     case "message":{
-      if(msg.member.hasPermission('ADMINISTRATOR')|| msg.author===bot.owner){
+      if(msg.member.hasPermission('ADMINISTRATOR')|| bot.isOwner(msg.author)){
         sendBossMessage();
       }
       else{
