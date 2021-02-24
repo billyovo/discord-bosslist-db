@@ -50,10 +50,10 @@ async function fetchEmote(){
       "F":[],
       "G":[],
   }
-
+  let msg;
   await fetchBossMessage()
   .then(async(message)=>{
-
+   msg = message;
    await message.reactions.resolve("🇦").users.fetch()
    .then(userList=>{
     data.A = userList.filter(user=>!user.bot).map(user=>user.username);
@@ -98,8 +98,8 @@ async function fetchEmote(){
      { name: 'Data:', value: JSON.stringify(data) },
    )
    .setTimestamp()
-   .setFooter('Click me to see the message', message.url);
-   
+   .setFooter('Click me to see the message', msg.url);
+
    return embed;
   }) 
 }
