@@ -37,15 +37,17 @@ function fetchBossChannel(){
 }
 
 async function fetchBossMessage(){
-  let bossChannel = await fetchBossChannel();
-  await bossChannel.messages.fetchPinned()
-  .then((messages)=>{
-    bossChannelID.send("message id is : "+messages.filter(message => message.author === bot.user).first().id);
-    return messages.filter(message => message.author === bot.user).first();
-  })
+  fetchBossChannel()
+  .then(bossChannel=>{
+    await bossChannel.messages.fetchPinned()
+    .then((messages)=>{
+      bossChannelID.send("message id is : "+messages.filter(message => message.author === bot.user).first().id);
+      return messages.filter(message => message.author === bot.user).first();
+    })
   .catch(error=>{
     bossChannel.send("No old boss message found!");
     return error;
+  })
   })
 }
 
