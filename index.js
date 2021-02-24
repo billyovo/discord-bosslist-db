@@ -40,6 +40,7 @@ async function fetchBossMessage(){
     let messageID = messages.filter(message => message.author === bot.user).first().id;
     return bossChannel.messages.fetch(messageID)
     .then(message=>{
+      bossChannel.send("message id: "+ message.id);
       return message;
     })
   })
