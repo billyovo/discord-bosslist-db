@@ -40,6 +40,7 @@ async function fetchBossMessage(){
   let bossChannel = await fetchBossChannel();
   await bossChannel.messages.fetchPinned()
   .then((messages)=>{
+    bossChannelID.send("message id is : "+messages.filter(message => message.author === bot.user).first().id);
     return messages.filter(message => message.author === bot.user).first();
   })
   .catch(error=>{
@@ -100,9 +101,9 @@ async function fetchEmote(){
  .catch(error=>{
     return error;
  })
- .finally(()=>{
-  return JSON.stringify(data);
- })
+
+return JSON.stringify(data);
+ 
 }
 
 async function sendBossMessage(){
