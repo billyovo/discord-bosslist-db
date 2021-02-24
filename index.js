@@ -55,7 +55,8 @@ async function fetchEmote(){
 
   fetchBossMessage()
   .then(async(message)=>{
-  console.log(message.content);
+  console.log(JSON.stringify(message));
+  console.log(JSON.stringify(message.reactions));
    await message.reactions.resolve("🇦").users.fetch()
    .then(userList=>{
     data.A = userList.filter(user=>!user.bot).map(user=>user.username);
