@@ -33,7 +33,7 @@ function fetchBossChannel(){
   return bot.channels.cache.get(bossChannelID);
 }
 
-async function fetchBossMessage(){
+function fetchBossMessage(){
   let bossChannel = fetchBossChannel();
   bossChannel.messages.fetchPinned()
   .then((messages)=>{
@@ -98,8 +98,8 @@ return JSON.stringify(data);
 }
 
 async function sendBossMessage(){
-  let bossChannel = await fetchBossChannel();
-  let oldBossMessage = await fetchBossMessage();
+  let bossChannel = fetchBossChannel();
+  let oldBossMessage = fetchBossMessage();
 
   let bossMessage  = "@everyone 新的一周開始了!!\r\n";
       bossMessage += "請給反應你要哪隻boss~\r\n";
