@@ -50,47 +50,38 @@ async function fetchEmote(){
       "F":[],
       "G":[],
   }
-  let msg;
-  return fetchBossMessage()
-  .then(async(message)=>{
-   msg = message;
-   await message.reactions.resolve("🇦").users.fetch()
-   .then(userList=>{
-    data.A = userList.filter(user=>!user.bot).map(user=>user.username);
-    })
+  let message = await fetchBossMessage();
 
-   await message.reactions.resolve("🇧").users.fetch()
-   .then(userList=>{
-    data.B = userList.filter(user=>!user.bot).map(user=>user.username);
+  await message.reactions.resolve("🇦").users.fetch()
+  .then(userList=>{
+   data.A = userList.filter(user=>!user.bot).map(user=>user.username);
    })
+  await message.reactions.resolve("🇧").users.fetch()
+  .then(userList=>{
+   data.B = userList.filter(user=>!user.bot).map(user=>user.username);
+  })
+  await message.reactions.resolve("🇨").users.fetch()
+  .then(userList=>{
+   data.C = userList.filter(user=>!user.bot).map(user=>user.username);
+  })
+  await message.reactions.resolve("🇩").users.fetch()
+  .then(userList=>{
+   data.D = userList.filter(user=>!user.bot).map(user=>user.username);
+  })
+   await message.reactions.resolve("🇪").users.fetch()
+  .then(userList=>{
+   data.E = userList.filter(user=>!user.bot).map(user=>user.username);
+  })
+  await message.reactions.resolve("🇫").users.fetch()
+  .then(userList=>{
+   data.F = userList.filter(user=>!user.bot).map(user=>user.username);
+  })
+  await message.reactions.resolve("🇬").users.fetch()
+  .then(userList=>{
+   data.G = userList.filter(user=>!user.bot).map(user=>user.username);
+  })
 
-   await message.reactions.resolve("🇨").users.fetch()
-   .then(userList=>{
-    data.C = userList.filter(user=>!user.bot).map(user=>user.username);
-   })
-
-   await message.reactions.resolve("🇩").users.fetch()
-   .then(userList=>{
-    data.D = userList.filter(user=>!user.bot).map(user=>user.username);
-   })
-
-    await message.reactions.resolve("🇪").users.fetch()
-   .then(userList=>{
-    data.E = userList.filter(user=>!user.bot).map(user=>user.username);
-   })
-
-   await message.reactions.resolve("🇫").users.fetch()
-   .then(userList=>{
-    data.F = userList.filter(user=>!user.bot).map(user=>user.username);
-   })
-
-   await message.reactions.resolve("🇬").users.fetch()
-   .then(userList=>{
-    data.G = userList.filter(user=>!user.bot).map(user=>user.username);
-   })
- })
- .finally(()=>{
-  const embed = new Discord.MessageEmbed()
+  const embed = await new Discord.MessageEmbed()
       	.setColor('#ffff00')
       	.setTitle('Boss statistics')
       	.setAuthor('', bot.avatarURL)
@@ -98,10 +89,9 @@ async function fetchEmote(){
       		{ name: 'Data:', value: JSON.stringify(data)},
       	)
       	.setTimestamp()
-      	.setFooter('Click me to see the message', msg.url);
+      	.setFooter('Click me to see the message', message.url);
 
   return embed; 
- })
   
 }
 
