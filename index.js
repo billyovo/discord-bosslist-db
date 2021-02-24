@@ -87,7 +87,7 @@ async function fetchEmote(){
         .setURL(message.url)
         .setDescription(JSON.stringify(data))
       	.setTimestamp()
-      	.setFooter(message.id, bot.user.avatarURL);
+      	.setFooter(message.id, bot.user.avatarURL());
 
   return embed; 
   
