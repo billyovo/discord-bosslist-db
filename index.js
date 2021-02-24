@@ -19,14 +19,14 @@ bot.login(TOKEN);
 
 bot.on('ready', () => {
   console.info("Discord SiuMui online");
-    fetchBossChannel()
-    .then((channel)=>{
+    let bossChannel = fetchBossChannel();
+    if(bossChannel!==undefined){
       console.log("Successful found channel "+channel.name);
-    })
-    .catch(()=>{
+    }
+    else{
       console.log("Boss channel is not found! Fix your config.");
       bot.destroy();
-    })
+  }
 });
 
 function fetchBossChannel(){
