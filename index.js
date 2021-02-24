@@ -98,7 +98,7 @@ return JSON.stringify(data);
 
 async function sendBossMessage(){
   let bossChannel = fetchBossChannel();
-  let oldBossMessage = fetchBossMessage();
+  let oldBossMessage = await fetchBossMessage();
 
   let bossMessage  = "@everyone 新的一周開始了!!\r\n";
       bossMessage += "請給反應你要哪隻boss~\r\n";
@@ -143,9 +143,9 @@ bot.on('message', msg => {
       break;
     }
     case "message":{
-      msg.member.hasPermission('ADMINISTRATOR') ?
-        sendBossMessage() :
-        msg.channel.send("No permission!");
+      //msg.member.hasPermission('ADMINISTRATOR') ?
+        sendBossMessage();
+       // msg.channel.send("No permission!");
       break;
     }
   }
