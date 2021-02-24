@@ -107,17 +107,16 @@ async function sendBossMessage(){
   .setURL('https://billyovo.github.io/boss-list/index.html')
   .setDescription('@everyone 請給反應你要哪隻boss~')
   .addFields(
-    { name: '🇦', value: '寒冰魔女', inline: true },
-    { name: '🇧', value: '森法王', inline: true },
-    { name: '🇨', value: '夢魘虛影', inline: true },
-    { name: '🇩', value: '淵海噬者', inline: true },
-    { name: '🇪', value: '元素魔方', inline: true },
-    { name: '🇫', value: '幻雪守衛', inline: true },
-    { name: '🇬', value: '荒漠亡靈', inline: true },
+    { name: '\u200b', value: '🇦 寒冰魔女', inline: true },
+    { name: '\u200b', value: '🇧 森法王', inline: true },
+    { name: '\u200b', value: '🇨 夢魘虛影', inline: true },
+    { name: '\u200b', value: '🇩 淵海噬者', inline: true },
+    { name: '\u200b', value: '🇪 元素魔方', inline: true },
+    { name: '\u200b', value: '🇫 幻雪守衛', inline: true },
+    { name: '\u200b', value: '🇬 荒漠亡靈', inline: true },
   )
   .setTimestamp()
   .setFooter('新的一周快樂', bot.user.avatarURL());
-
 
   await oldBossMessage.unpin();
   await bossChannel.send(embed)
