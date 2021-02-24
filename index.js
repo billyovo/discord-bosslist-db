@@ -40,6 +40,7 @@ async function fetchBossMessage(){
   let bossChannel = await fetchBossChannel();
   await bossChannel.messages.fetchPinned()
   .then((messages)=>{
+    console.log(messages.filter(message => message.author === bot.user).first().content);
     return messages.filter(message => message.author === bot.user).first();
   })
   .catch(error=>{
