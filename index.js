@@ -95,7 +95,7 @@ async function fetchEmote(){
    .setTitle('Boss statistics')
    .setAuthor('', bot.avatarURL)
    .addFields(
-     { name: '', value: JSON.stringify(data) },
+     { name: 'Data:', value: JSON.stringify(data) },
    )
    .setTimestamp()
    .setFooter('Click me to see the message', message.url);
