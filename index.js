@@ -20,8 +20,8 @@ bot.login(TOKEN);
 bot.on('ready', () => {
   console.info("Discord SiuMui online");
     fetchBossChannel()
-    .then(()=>{
-      console.log("Successful found channel");
+    .then((channel)=>{
+      console.log("Successful found channel "+channel.name);
     })
     .catch(()=>{
       console.log("Boss channel is not found! Fix your config.");
@@ -100,8 +100,9 @@ async function fetchEmote(){
  .catch(error=>{
     return error;
  })
-
+ .finally(()=>{
   return JSON.stringify(data);
+ })
 }
 
 async function sendBossMessage(){
@@ -154,6 +155,7 @@ bot.on('message', msg => {
       msg.member.hasPermission('ADMINISTRATOR') ?
         sendBossMessage():
         msg.channel.send("No permission!");
+      break;
     }
   }
 });
