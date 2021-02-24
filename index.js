@@ -51,7 +51,7 @@ async function fetchEmote(){
       "G":[],
   }
   let msg;
-  return fetchBossMessage()
+  await fetchBossMessage()
   .then(async(message)=>{
    msg = message;
    await message.reactions.resolve("🇦").users.fetch()
@@ -90,18 +90,19 @@ async function fetchEmote(){
    })
  })
  .finally(()=>{
-   const embed = new Discord.MessageEmbed()
-   .setColor('#ffff00')
-   .setTitle('Boss statistics')
-   .setAuthor('', bot.avatarURL)
-   .addFields(
-     { name: 'Data:', value: JSON.stringify(data) },
-   )
-   .setTimestamp()
-   .setFooter('Click me to see the message', msg.url);
+  const embed = new Discord.MessageEmbed()
+      	.setColor('#ffff00')
+      	.setTitle('Boss statistics')
+      	.setAuthor('', bot.avatarURL)
+      	.addFields(
+      		{ name: 'Data:', value: JSON.stringify(ret)},
+      	)
+      	.setTimestamp()
+      	.setFooter('Click me to see the message', msg.url);
 
-   return embed;
-  }) 
+  return embed; 
+ })
+  
 }
 
 async function sendBossMessage(){
