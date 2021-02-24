@@ -143,9 +143,9 @@ bot.on('message', msg => {
       break;
     }
     case "message":{
-      //msg.member.hasPermission('ADMINISTRATOR') ?
-        sendBossMessage();
-       // msg.channel.send("No permission!");
+      msg.member.hasPermission('ADMINISTRATOR') ?
+        sendBossMessage():
+        msg.channel.send("No permission!");
       break;
     }
   }
