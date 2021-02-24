@@ -40,7 +40,6 @@ async function fetchBossMessage(){
   let bossChannel = await fetchBossChannel();
   await bossChannel.messages.fetchPinned()
   .then((messages)=>{
-    console.log(messages.filter(message => message.author === bot.user).first().content);
     return messages.filter(message => message.author === bot.user).first();
   })
   .catch(error=>{
@@ -61,7 +60,7 @@ async function fetchEmote(){
   }
 
   let message = await fetchBossMessage()
-  .then(async()=>{
+  .then(async(message)=>{
 
    await message.reactions.resolve("🇦").users.fetch()
    .then(userList=>{
