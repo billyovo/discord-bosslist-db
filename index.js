@@ -83,10 +83,11 @@ async function fetchEmote(){
 
   const embed = await new Discord.MessageEmbed()
       	.setColor('#ffff00')
-      	.setTitle('Click me to jump to message',message.url)
+      	.setTitle('Click me to jump to message')
+        .setURL(message.url)
         .setDescription(JSON.stringify(data))
       	.setTimestamp()
-      	.setFooter('message id: '+message.id, bot.avatarURL);
+      	.setFooter(message.id, bot.avatarURL);
 
   return embed; 
   
