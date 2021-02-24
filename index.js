@@ -161,7 +161,7 @@ bot.on('message', msg => {
        .setColor('#ffff00')
        .setDescription('Pong')
        .addFields(
-        { name: '\u200b', value: '+bot.ws.ping+"ms"' },
+        { name: bot.ws.ping+'ms', value: '\u200b' },
         )
        msg.channel.send(embed);
       break;
