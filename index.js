@@ -37,7 +37,6 @@ async function fetchBossMessage(){
   let bossChannel = fetchBossChannel();
   let messages = await bossChannel.messages.fetchPinned();
   let bossMessage = await bossChannel.messages.fetch(messages.filter(message => message.author === bot.user).first().id,true,true);
-  bossChannel.send("Message id is : "+bossMessage.id);
   return bossMessage;
 }
 
