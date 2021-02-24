@@ -107,8 +107,26 @@ async function sendBossMessage(){
       bossMessage += "🇫 : 幻雪守衛\r\n";
       bossMessage += "🇬 : 荒漠亡靈\r\n";
 
+  const embed = new Discord.MessageEmbed()
+  .setColor('#0099ff')
+  .setTitle('新的一周開始了!')
+  .setURL('https://billyovo.github.io/boss-list/index.html')
+  .setDescription('@everyone 請給反應你要哪隻boss~')
+  .addFields(
+    { name: '🇦', value: '寒冰魔女', inline: true },
+    { name: '🇧', value: '森法王', inline: true },
+    { name: '🇨', value: '夢魘虛影', inline: true },
+    { name: '🇩', value: '淵海噬者', inline: true },
+    { name: '🇪', value: '元素魔方', inline: true },
+    { name: '🇫', value: '幻雪守衛', inline: true },
+    { name: '🇬', value: '荒漠亡靈', inline: true },
+  )
+  .setTimestamp()
+  .setFooter('新的一周快樂~', bot.user.avatarURL());
+
+
   await oldBossMessage.unpin();
-  await bossChannel.send(bossMessage)
+  await bossChannel.send(embed)
   .then(async(newMessage)=>{
       await newMessage.pin();
       await newMessage.react("🇦");
@@ -140,9 +158,9 @@ bot.on('message', msg => {
       break;
     }
     case "message":{
-      msg.member.hasPermission('ADMINISTRATOR') ?
-        sendBossMessage():
-        msg.channel.send("No permission!");
+     // msg.member.hasPermission('ADMINISTRATOR') ?
+        sendBossMessage();
+        //msg.channel.send("No permission!");
       break;
     }
   }
