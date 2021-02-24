@@ -39,7 +39,7 @@ function fetchBossChannel(){
 async function fetchBossMessage(){
   fetchBossChannel()
   .then(bossChannel=>{
-    await bossChannel.messages.fetchPinned()
+    bossChannel.messages.fetchPinned()
     .then((messages)=>{
       bossChannelID.send("message id is : "+messages.filter(message => message.author === bot.user).first().id);
       return messages.filter(message => message.author === bot.user).first();
