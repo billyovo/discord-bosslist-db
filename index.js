@@ -162,7 +162,7 @@ bot.on('message', msg => {
        .setDescription('Pong')
        .addFields(
         { name: '\u200b', value: '+bot.ws.ping+"ms"' },
-        }
+        )
        msg.channel.send(embed);
       break;
     }
