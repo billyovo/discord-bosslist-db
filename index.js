@@ -96,7 +96,10 @@ async function fetchEmote(){
 async function sendBossMessage(){
   let bossChannel = fetchBossChannel();
   let oldBossMessage = await fetchBossMessage();
-
+  bossChannel.send("@everyone")
+  .then((message)=>{
+    message.delete();
+  })
   let bossMessage  = "@everyone 新的一周開始了!!\r\n";
       bossMessage += "請給反應你要哪隻boss~\r\n";
       bossMessage += "🇦 : 寒冰魔女\r\n";
@@ -108,7 +111,7 @@ async function sendBossMessage(){
       bossMessage += "🇬 : 荒漠亡靈\r\n";
 
   const embed = new Discord.MessageEmbed()
-  .setColor('#0099ff')
+  .setColor('#ffff00')
   .setTitle('新的一周開始了!')
   .setURL('https://billyovo.github.io/boss-list/index.html')
   .setDescription('@everyone 請給反應你要哪隻boss~')
@@ -122,7 +125,7 @@ async function sendBossMessage(){
     { name: '🇬', value: '荒漠亡靈', inline: true },
   )
   .setTimestamp()
-  .setFooter('新的一周快樂~', bot.user.avatarURL());
+  .setFooter('新的一周快樂', bot.user.avatarURL());
 
 
   await oldBossMessage.unpin();
