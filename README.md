@@ -1,5 +1,5 @@
 # discord-bosslist-bot
-A discord bot to remind and collect your town bosses.
+A discord bot to remind and summarise your town bosses.
 
 ## To Use
 Fill in the config.json, bossChannelID will be the channel you want the boss to send the messages. 
