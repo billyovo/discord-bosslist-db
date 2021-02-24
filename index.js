@@ -100,15 +100,6 @@ async function sendBossMessage(){
   .then((message)=>{
     message.delete();
   })
-  let bossMessage  = "@everyone 新的一周開始了!!\r\n";
-      bossMessage += "請給反應你要哪隻boss~\r\n";
-      bossMessage += "🇦 : 寒冰魔女\r\n";
-      bossMessage += "🇧 : 森法王\r\n";
-      bossMessage += "🇨 : 夢魘虛影\r\n";
-      bossMessage += "🇩 : 淵海噬者\r\n";
-      bossMessage += "🇪 : 元素魔方\r\n";
-      bossMessage += "🇫 : 幻雪守衛\r\n";
-      bossMessage += "🇬 : 荒漠亡靈\r\n";
 
   const embed = new Discord.MessageEmbed()
   .setColor('#ffff00')
