@@ -100,9 +100,6 @@ async function fetchEmote(){
     data.G = userList.filter(user=>!user.bot).map(user=>user.username);
    })
  })
- .catch(error=>{
-    return error;
- })
 
 return JSON.stringify(data);
  
