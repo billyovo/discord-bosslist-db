@@ -10,4 +10,5 @@ here(https://github.com/billyovo/boss-list)
 
 ## Commands
 boss : send the town member reaction boss data
+
 message : manually send the boss message and reaction for organzing boss
