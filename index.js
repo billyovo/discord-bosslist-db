@@ -32,7 +32,7 @@ bot.on('ready', () => {
 function fetchBossChannel(){
   return new Promise((resolve, reject) => {
       let bossChannel = bot.channels.cache.get(bossChannelID);
-      (bossChannel === undefined)? resolve(bossChannel) : reject(new Error());
+      (bossChannel !== undefined)? resolve(bossChannel) : reject(new Error());
   });
 }
 
