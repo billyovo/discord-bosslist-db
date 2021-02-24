@@ -33,7 +33,7 @@ function fetchBossChannel(){
   return bot.channels.cache.get(bossChannelID);
 }
 
-function fetchBossMessage(){
+async function fetchBossMessage(){
   let bossChannel = fetchBossChannel();
   bossChannel.messages.fetchPinned()
   .then((messages)=>{
