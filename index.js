@@ -151,7 +151,7 @@ bot.on('message', msg => {
     }
 
     case "message":{
-      if(msg.member.hasPermission('ADMINISTRATOR')|| bot.isOwner(msg.author)){
+      if(msg.member.hasPermission('ADMINISTRATOR')){
         sendBossMessage();
       }
       else{
