@@ -33,12 +33,12 @@ function fetchBossChannel(){
   return bot.channels.cache.get(bossChannelID);
 }
 
-async function fetchBossMessage(){
+function fetchBossMessage(){
   let bossChannel = fetchBossChannel();
-  return bossChannel.messages.fetchPinned()
+  bossChannel.messages.fetchPinned()
   .then((messages)=>{
-    bossChannel.send("message id is : "+messages.filter(message => message.author === bot.user).first().id);
-    return messages.filter(message => message.author === bot.user).first();
+    let messageID = messages.filter(message => message.author === bot.user).first().id;
+    return bossChannel.messages.fetch(messageID);
   })
 }
 
@@ -55,8 +55,7 @@ async function fetchEmote(){
 
   fetchBossMessage()
   .then(async(message)=>{
-  console.log(JSON.stringify(message));
-  console.log(JSON.stringify(message.reactions));
+
    await message.reactions.resolve("🇦").users.fetch()
    .then(userList=>{
     data.A = userList.filter(user=>!user.bot).map(user=>user.username);
@@ -77,7 +76,7 @@ async function fetchEmote(){
     data.D = userList.filter(user=>!user.bot).map(user=>user.username);
    })
 
-  await message.reactions.resolve("🇪").users.fetch()
+    await message.reactions.resolve("🇪").users.fetch()
    .then(userList=>{
     data.E = userList.filter(user=>!user.bot).map(user=>user.username);
    })
@@ -146,7 +145,7 @@ bot.on('message', msg => {
     }
     case "message":{
       msg.member.hasPermission('ADMINISTRATOR') ?
-        sendBossMessage():
+        sendBossMessage() :
         msg.channel.send("No permission!");
       break;
     }
