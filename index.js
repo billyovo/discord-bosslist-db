@@ -33,7 +33,7 @@ function fetchBossChannel(){
   return bot.channels.cache.get(bossChannelID);
 }
 
-function fetchBossMessage(){
+async function fetchBossMessage(){
   let bossChannel = fetchBossChannel();
   bossChannel.messages.fetchPinned()
   .then((messages)=>{
@@ -53,7 +53,7 @@ async function fetchEmote(){
       "G":[],
   }
 
-  await fetchBossMessage()
+  fetchBossMessage()
   .then(async(message)=>{
 
    await message.reactions.resolve("🇦").users.fetch()
