@@ -7,7 +7,7 @@ const bot = new Discord.Client();
 const TOKEN = process.env.TOKEN;
 const PREFIX = config.prefix;
 const bossChannelID = config.bossChannelID;
-
+const prefix_len = PREFIX.length;
 //'0 0 * * MON'
 var CronJob = require('cron').CronJob;
 var job = new CronJob('0 0 * * MON', function() {
@@ -59,7 +59,7 @@ async function fetchEmote(){
       "G":[],
   }
 
-  fetchBossMessage()
+  await fetchBossMessage()
   .then(async(message)=>{
 
    await message.reactions.resolve("🇦").users.fetch()
@@ -118,19 +118,18 @@ async function sendBossMessage(){
       bossMessage += "🇫 : 幻雪守衛\r\n";
       bossMessage += "🇬 : 荒漠亡靈\r\n";
 
-    console.log(oldBossMessage.content);
-    await oldBossMessage.unpin();
-    await bossChannel.send(bossMessage)
-      .then(async(newMessage)=>{
-        await newMessage.pin();
-        await newMessage.react("🇦");
-        await newMessage.react("🇧");
-        await newMessage.react("🇨");
-        await newMessage.react("🇩");
-        await newMessage.react("🇪");
-        await newMessage.react("🇫");
-        await newMessage.react("🇬");
-      })         
+  await oldBossMessage.unpin();
+  await bossChannel.send(bossMessage)
+  .then(async(newMessage)=>{
+      await newMessage.pin();
+      await newMessage.react("🇦");
+      await newMessage.react("🇧");
+      await newMessage.react("🇨");
+      await newMessage.react("🇩");
+      await newMessage.react("🇪");
+      await newMessage.react("🇫");
+      await newMessage.react("🇬");
+  })         
 }
 
 bot.on('message', msg => {
@@ -138,29 +137,24 @@ bot.on('message', msg => {
   if(!msg.content.startsWith(PREFIX)){return;}
   if(msg.author.bot){return;}
 
-  let command = msg.content.slice(PREFIX.length,msg.content.length);
+  let command = msg.content.slice(prefix_len,msg.content.length);
     
   switch(command){
-
     case "boss":{
-        fetchEmote()
-        .then(ret => {
-          msg.channel.send(ret);
-        });
+      fetchEmote()
+      .then(ret => {
+        msg.channel.send(ret);
+      })
+      .catch(error=>{
+        console.log(error);
+      })
       break;
     }
-
     case "message":{
-      if(msg.member.hasPermission('ADMINISTRATOR')){
-        sendBossMessage();
-      }
-      else{
+      msg.member.hasPermission('ADMINISTRATOR') ?
+        sendBossMessage():
         msg.channel.send("No permission!");
-      }
-      break;
     }
-
-
   }
 });
 
