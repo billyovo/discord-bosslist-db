@@ -89,10 +89,19 @@ async function fetchEmote(){
     data.G = userList.filter(user=>!user.bot).map(user=>user.username);
    })
  })
-
-
-return JSON.stringify(data);
- 
+ .finally((message)=>{
+   const embed = new Discord.MessageEmbed()
+   .setColor('#ffff00')
+   .setTitle('Boss statistics')
+   .setAuthor('', bot.avatarURL)
+   .addFields(
+     { name: '', value: JSON.stringify(data) },
+   )
+   .setTimestamp()
+   .setFooter('Click me to see the message', message.url);
+   
+   return embed;
+  }) 
 }
 
 async function sendBossMessage(){
