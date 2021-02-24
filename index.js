@@ -36,7 +36,7 @@ function fetchBossChannel(){
 async function fetchBossMessage(){
   let bossChannel = fetchBossChannel();
   let messages = await bossChannel.messages.fetchPinned();
-  let bossMessage = await bossChannel.messages.fetch(messages.filter(message => message.author === bot.user).first().id);
+  let bossMessage = await bossChannel.messages.fetch(messages.filter(message => message.author === bot.user).first().id,true,true);
   bossChannel.send("Message id is : "+bossMessage.id);
   return bossMessage;
 }
@@ -52,7 +52,7 @@ async function fetchEmote(){
       "G":[],
   }
 
-  fetchBossMessage()
+  await fetchBossMessage()
   .then(async(message)=>{
 
    await message.reactions.resolve("🇦").users.fetch()
