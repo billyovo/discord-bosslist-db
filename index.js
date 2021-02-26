@@ -189,16 +189,17 @@ const host = '0.0.0.0';
 const port = process.env.PORT || 3000;
 
 const requestListener = function (req, res) {
-    res.setHeader("Content-Type", "application/json");
-    res.setHeader("Access-Control-Allow-Origin", process.env.ALLOW_DOMAIN);
-    res.writeHead(200);
+    
     if(req.method=="GET"){
+     res.setHeader("Content-Type", "application/json");
+     res.setHeader("Access-Control-Allow-Origin", process.env.ALLOW_DOMAIN); 
     fetchEmote()
     .then(ret => {
       res.end(ret);
     });
     }
   else{
+    res.writeHead(200);
     res.end();
   }
 };
