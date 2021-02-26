@@ -136,7 +136,21 @@ bot.on('message', msg => {
     case "boss":{
       fetchEmote()
       .then(ret => {
-        msg.channel.send(ret);
+        ret = JSON.parse(ret);
+        const embed = new Discord.MessageEmbed()
+        .setColor('#ffff00')
+        .setTitle('本周的boss:')
+        .addFields(
+          { name: '\u200b', value: 'A '+ret.A.join(" ")},
+          { name: '\u200b', value: 'B '+ret.B.join(" ")},
+          { name: '\u200b', value: 'C '+ret.C.join(" ")},
+          { name: '\u200b', value: 'D '+ret.D.join(" ")},
+          { name: '\u200b', value: 'E '+ret.E.join(" ")},
+          { name: '\u200b', value: 'F '+ret.F.join(" ")},
+          { name: '\u200b', value: 'G '+ret.G.join(" ")},
+        )
+        .setTimestamp()
+        .setFooter('', bot.user.avatarURL());
       })
       .catch(error=>{
         console.log(error);
@@ -181,5 +195,3 @@ const server = http.createServer(requestListener);
 server.listen(port, host, () => {
     console.log(`HTTP Server is running on http://${host}:${port}`);
 });
-
-
