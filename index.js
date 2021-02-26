@@ -1,5 +1,6 @@
 require('dotenv').config();
 const config = require('./config.json');
+const fetch = require("node-fetch");
 
 const Discord = require('discord.js');
 const bot = new Discord.Client();
@@ -14,9 +15,7 @@ var job = new CronJob('0 0 * * MON', function() {
 }, null, true, 'Asia/Taipei');
 
 var keepAwake = new CronJob('*/2 * * * *', function() {
-  fetch('0.0.0.0', {
-  method: 'HEAD', // or 'PUT'
-  })
+  fetch(ENDPOINT,{method: "HEAD"})
 }, null, true, 'Asia/Taipei');
 
 job.start();
