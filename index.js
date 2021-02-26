@@ -141,17 +141,16 @@ bot.on('message', msg => {
         .setColor('#ffff00')
         .setTitle('本周的boss:')
         .addFields(
-          { name: '\u200b', value: 'A '+ret.A.join(" ")},
-          { name: '\u200b', value: 'B '+ret.B.join(" ")},
-          { name: '\u200b', value: 'C '+ret.C.join(" ")},
-          { name: '\u200b', value: 'D '+ret.D.join(" ")},
-          { name: '\u200b', value: 'E '+ret.E.join(" ")},
-          { name: '\u200b', value: 'F '+ret.F.join(" ")},
-          { name: '\u200b', value: 'G '+ret.G.join(" ")},
+          { name: '\u200b', value: '🇦 '+ret.A.join(" ")},
+          { name: '\u200b', value: '🇧 '+ret.B.join(" ")},
+          { name: '\u200b', value: '🇨 '+ret.C.join(" ")},
+          { name: '\u200b', value: '🇩 '+ret.D.join(" ")},
+          { name: '\u200b', value: '🇪 '+ret.E.join(" ")},
+          { name: '\u200b', value: '🇫 '+ret.F.join(" ")},
+          { name: '\u200b', value: '🇬 '+ret.G.join(" ")},
         )
         .setTimestamp()
-        .setFooter('', bot.user.avatarURL());
-        msg.channel.send(embed);
+        .setFooter('\u200b', bot.user.avatarURL());
       })
       .catch(error=>{
         console.log(error);
