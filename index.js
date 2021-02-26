@@ -15,7 +15,7 @@ var job = new CronJob('0 0 * * MON', function() {
 }, null, true, 'Asia/Taipei');
 
 var keepAwake = new CronJob('*/2 * * * *', function() {
-  fetch(ENDPOINT,{method: "HEAD"})
+  fetch('0.0.0.0',{method: "HEAD"})
 }, null, true, 'Asia/Taipei');
 
 job.start();
