@@ -6,6 +6,8 @@ const Discord = require('discord.js');
 const bot = new Discord.Client();
 const TOKEN = process.env.TOKEN;
 const PREFIX = config.prefix;
+const ENDPOINT = config.endpoint;
+
 const bossChannelID = config.bossChannelID;
 const prefix_len = PREFIX.length;
 //'0 0 * * MON'
@@ -15,7 +17,7 @@ var job = new CronJob('0 0 * * MON', function() {
 }, null, true, 'Asia/Taipei');
 
 var keepAwake = new CronJob('*/2 * * * *', function() {
-  fetch('0.0.0.0',{method: "HEAD"})
+  fetch(ENDPOINT,{method: "HEAD"})
 }, null, true, 'Asia/Taipei');
 
 job.start();
