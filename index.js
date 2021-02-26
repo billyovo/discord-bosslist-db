@@ -150,7 +150,8 @@ bot.on('message', msg => {
           { name: '\u200b', value: '🇬 '+ret.G.join(" ")},
         )
         .setTimestamp()
-        .setFooter('你好嗎', bot.user.avatarURL());
+        .setFooter('你好嗎~', bot.user.avatarURL());
+        msg.channel.send(embed);
       })
       .catch(error=>{
         console.log(error);
