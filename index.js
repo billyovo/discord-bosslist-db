@@ -2,7 +2,6 @@ require('dotenv').config();
 const config = require('./config.json');
 
 const Discord = require('discord.js');
-const fs = require('fs');
 const bot = new Discord.Client();
 const TOKEN = process.env.TOKEN;
 const PREFIX = config.prefix;
@@ -81,15 +80,9 @@ async function fetchEmote(){
    data.G = userList.filter(user=>!user.bot).map(user=>user.username);
   })
 
-  const embed = await new Discord.MessageEmbed()
-      	.setColor('#ffff00')
-      	.setTitle('Click me to jump to message')
-        .setURL(message.url)
-        .setDescription(JSON.stringify(data))
-      	.setTimestamp()
-      	.setFooter(message.id, bot.user.avatarURL());
+  
 
-  return embed; 
+  return JSON.stringify(data); 
   
 }
 
@@ -156,31 +149,24 @@ bot.on('message', msg => {
         msg.channel.send("No permission!");
       break;
     }
-    case "ping":{
-       const embed = new Discord.MessageEmbed()
-       .setColor('#ffff00')
-       .setTitle('Pong')
-       .setDescription(bot.ws.ping+'ms')
-       msg.channel.send(embed);
-      break;
-    }
   }
 });
 
 
 const http = require("http");
 const host = '0.0.0.0';
-const port =  process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 
 const requestListener = function (req, res) {
     res.setHeader("Content-Type", "application/json");
     res.setHeader("Access-Control-Allow-Origin", process.env.ALLOW_DOMAIN);
     res.writeHead(200);
+
     fetchEmote()
     .then(ret => {
-       res.end("test");
-     });
-    
+      res.end(ret);
+    });
+      
 };
 
 const server = http.createServer(requestListener);
