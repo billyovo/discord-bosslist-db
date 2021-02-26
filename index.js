@@ -149,6 +149,14 @@ bot.on('message', msg => {
         msg.channel.send("No permission!");
       break;
     }
+    case "ping":{
+       const embed = new Discord.MessageEmbed()
+       .setColor('#ffff00')
+       .setTitle('Pong')
+       .setDescription(bot.ws.ping+'ms')
+       msg.channel.send(embed);
+      break;
+    }  
   }
 });
 
