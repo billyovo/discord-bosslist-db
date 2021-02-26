@@ -151,6 +151,7 @@ bot.on('message', msg => {
         )
         .setTimestamp()
         .setFooter('', bot.user.avatarURL());
+        msg.channel.send(embed);
       })
       .catch(error=>{
         console.log(error);
