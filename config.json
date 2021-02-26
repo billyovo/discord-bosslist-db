@@ -1,4 +1,5 @@
 {
     "bossChannelID": "728568879302836275",
-    "prefix": "-"
+    "prefix": "-",
+    "endpoint": "https://discord-bosslist-bot.herokuapp.com/"
 }
