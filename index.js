@@ -13,7 +13,14 @@ var job = new CronJob('0 0 * * MON', function() {
   sendBossMessage();
 }, null, true, 'Asia/Taipei');
 
+var keepAwake = new CronJob('*/2 * * * *', function() {
+  fetch('0.0.0.0', {
+  method: 'HEAD', // or 'PUT'
+  })
+}, null, true, 'Asia/Taipei');
+
 job.start();
+keepAwake.start();
 bot.login(TOKEN);
 
 bot.on('ready', () => {
