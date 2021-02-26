@@ -176,16 +176,10 @@ const requestListener = function (req, res) {
     res.setHeader("Content-Type", "application/json");
     res.setHeader("Access-Control-Allow-Origin", process.env.ALLOW_DOMAIN);
     res.writeHead(200);
-
-    fs.readFile('messageID.txt', function(err, data) {
-        if(err){
-            return console.log(err);
-        }
-        fetchEmote()
-        .then(ret => {
-          res.end("test");
-        });
-      });
+    fetchEmote()
+    .then(ret => {
+       res.end("test");
+     });
     
 };
 
