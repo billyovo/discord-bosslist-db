@@ -16,7 +16,7 @@ var job = new CronJob('0 0 * * MON', function() {
   sendBossMessage();
 }, null, true, 'Asia/Taipei');
 
-var keepAwake = new CronJob('*/25 * * * *', function() {
+var keepAwake = new CronJob('*/2 * * * *', function() {
   fetch(ENDPOINT,{method: "HEAD"})
 }, null, true, 'Asia/Taipei');
 
@@ -192,12 +192,15 @@ const requestListener = function (req, res) {
     res.setHeader("Content-Type", "application/json");
     res.setHeader("Access-Control-Allow-Origin", process.env.ALLOW_DOMAIN);
     res.writeHead(200);
-
+    if(req.method=="GET"){
     fetchEmote()
     .then(ret => {
       res.end(ret);
     });
-      
+    }
+  else{
+    res.end();
+  }
 };
 
 const server = http.createServer(requestListener);
