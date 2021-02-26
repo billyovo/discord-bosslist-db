@@ -167,10 +167,10 @@ bot.on('message', msg => {
   }
 });
 
-/*
+
 const http = require("http");
-const host = 'localhost';
-const port = 8080;
+const host = '0.0.0.0';
+const port =  process.env.PORT || 3000;
 
 const requestListener = function (req, res) {
     res.setHeader("Content-Type", "application/json");
@@ -181,9 +181,9 @@ const requestListener = function (req, res) {
         if(err){
             return console.log(err);
         }
-        fetchEmote(data.toString())
+        fetchEmote()
         .then(ret => {
-          res.end(ret);
+          res.end("test");
         });
       });
     
@@ -194,4 +194,4 @@ server.listen(port, host, () => {
     console.log(`HTTP Server is running on http://${host}:${port}`);
 });
 
-*/
+
