@@ -26,6 +26,7 @@ bot.login(TOKEN);
 
 bot.on('ready', () => {
   console.info("Discord SiuMui online");
+  bot.user.setActivity('boss 時間表', { type: 'WATCHING' });
     let bossChannel = fetchBossChannel();
     if(bossChannel!==undefined){
       console.log("Successful found channel "+bossChannel.name);
