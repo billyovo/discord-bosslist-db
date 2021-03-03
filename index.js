@@ -182,6 +182,7 @@ const host = '0.0.0.0';
 const port = process.env.PORT || 3000;
 
 const requestListener = function (req, res) {
+    console.log(req.destination);
     if(req.destination!="/"){
       res.writeHead(404);
       res.end();
