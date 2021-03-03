@@ -183,7 +183,7 @@ const port = process.env.PORT || 3000;
 
 const requestListener = function (req, res) {
     console.log(req.destination);
-    if(req.destination!="/"){
+    if(req.destination!==undefined){
       res.writeHead(404);
       res.end();
       return;
