@@ -16,12 +16,8 @@ var job = new CronJob('0 0 * * MON', function() {
   sendBossMessage();
 }, null, true, 'Asia/Taipei');
 
-var keepAwake = new CronJob('*/25 * * * *', function() {
-  fetch(ENDPOINT,{method: "HEAD"})
-}, null, true, 'Asia/Taipei');
-
 job.start();
-keepAwake.start();
+
 bot.login(TOKEN);
 
 bot.on('ready', () => {
