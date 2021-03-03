@@ -131,7 +131,7 @@ bot.on('message', msg => {
   if(!msg.content.startsWith(PREFIX)){return;}
   if(msg.author.bot){return;}
 
-  let command = msg.content.slice(prefix_len,msg.content.length);
+  let command = msg.content.slice(prefix_len,msg.content.length).toLowerCase();
     
   switch(command){
     case "boss":{
@@ -182,7 +182,7 @@ const host = '0.0.0.0';
 const port = process.env.PORT || 3000;
 
 const requestListener = function (req, res) {
-    if(req.url!=="/"){
+    if(req.url!="/"){
       res.writeHead(404);
       res.end();
       return;
@@ -199,7 +199,7 @@ const requestListener = function (req, res) {
         res.writeHead(502)
         res.end();
       })
-      }
+    }
     else{
       res.writeHead(200);
       res.end();
