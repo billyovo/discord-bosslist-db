@@ -84,10 +84,7 @@ async function fetchEmote(){
    data.G = userList.filter(user=>!user.bot).map(user=>user.username);
   })
 
-  
-
   return JSON.stringify(data); 
-  
 }
 
 async function sendBossMessage(){
@@ -185,7 +182,10 @@ const host = '0.0.0.0';
 const port = process.env.PORT || 3000;
 
 const requestListener = function (req, res) {
-    
+    if(req.destination!="/"){
+      res.writeHead(404);
+      res.end();
+    }
     if(req.method=="GET"){
       res.setHeader("Content-Type", "application/json");
       res.setHeader("Access-Control-Allow-Origin", process.env.ALLOW_DOMAIN); 
@@ -195,7 +195,7 @@ const requestListener = function (req, res) {
         res.end(ret);
       })
       .catch(()=>{
-        res.writeHead(504)
+        res.writeHead(502)
         res.end();
       })
       }
