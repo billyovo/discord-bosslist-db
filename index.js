@@ -6,7 +6,6 @@ const Discord = require('discord.js');
 const bot = new Discord.Client();
 const TOKEN = process.env.TOKEN;
 const PREFIX = config.prefix;
-const ENDPOINT = config.endpoint;
 
 const bossChannelID = config.bossChannelID;
 const prefix_len = PREFIX.length;
@@ -102,7 +101,7 @@ async function sendBossMessage(){
   const embed = new Discord.MessageEmbed()
   .setColor('#ffff00')
   .setTitle('新的一周開始了!')
-  .setURL('https://billyovo.github.io/boss-list/index.html')
+  .setURL(config.bossWebsiteURL)
   .setDescription('@everyone 請給反應你要哪隻boss~')
   .addFields(
     { name: '\u200b', value: '🇦 寒冰魔女', inline: true },
@@ -188,20 +187,25 @@ const port = process.env.PORT || 3000;
 const requestListener = function (req, res) {
     
     if(req.method=="GET"){
-     res.setHeader("Content-Type", "application/json");
-     res.setHeader("Access-Control-Allow-Origin", process.env.ALLOW_DOMAIN); 
-    fetchEmote()
-    .then(ret => {
-      res.end(ret);
-    });
+      res.setHeader("Content-Type", "application/json");
+      res.setHeader("Access-Control-Allow-Origin", process.env.ALLOW_DOMAIN); 
+      fetchEmote()
+      .then(ret => {
+        res.writeHead(200);
+        res.end(ret);
+      })
+      .catch(()=>{
+        res.writeHead(500)
+        res.end();
+      })
+      }
+    else{
+      res.writeHead(200);
+      res.end();
     }
-  else{
-    res.writeHead(200);
-    res.end();
-  }
 };
 
 const server = http.createServer(requestListener);
 server.listen(port, host, () => {
-    console.log(`HTTP Server is running on http://${host}:${port}`);
+    console.log(`API server online on http://${host}:${port}`);
 });
