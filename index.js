@@ -185,6 +185,7 @@ const requestListener = function (req, res) {
     if(req.destination!="/"){
       res.writeHead(404);
       res.end();
+      return;
     }
     if(req.method=="GET"){
       res.setHeader("Content-Type", "application/json");
