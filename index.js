@@ -195,7 +195,7 @@ const requestListener = function (req, res) {
         res.end(ret);
       })
       .catch(()=>{
-        res.writeHead(502)
+        res.writeHead(504)
         res.end();
       })
       }
