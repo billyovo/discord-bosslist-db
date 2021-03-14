@@ -135,6 +135,27 @@ bot.on('message', msg => {
     
   switch(command){
     case "boss":{
+      let timetable = new Array(7);
+      timetable[0] = ["A","B","C","D"];
+      timetable[1] = ["E","F","G","A"];
+      timetable[2] = ["B","C","D","E"];
+      timetable[3] = ["F","G","A","B"];
+      timetable[4] = ["C","D","E","F"];
+      timetable[5] = ["G","A","B","C"];
+      timetable[6] = ["D","E","F","G"];
+      
+      let weekday = new Array(7);
+      weekday[0] = "日";
+      weekday[1] = "一";
+      weekday[2] = "二";
+      weekday[3] = "三";
+      weekday[4] = "四";
+      weekday[5] = "五";
+      weekday[6] = "六";
+      
+      let today = new Date();
+      let weekIndex = today.getDay();
+      
       fetchEmote()
       .then(ret => {
         ret = JSON.parse(ret);
@@ -151,7 +172,7 @@ bot.on('message', msg => {
           { name: '\u200b', value: '🇬 '+ret.G.join(" ")},
         )
         .setTimestamp()
-        .setFooter('你好嗎~', bot.user.avatarURL());
+        .setFooter('星期'+weekday[weekIndex]+'的boss 7:30'+timetable[weekIndex][0]+' '+timetable[weekIndex][1]+' | 9:30 '+timetable[weekIndex][2]+ ' '+timetable[weekIndex][3], bot.user.avatarURL());
         msg.channel.send(embed);
       })
       .catch(error=>{
