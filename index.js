@@ -172,7 +172,7 @@ bot.on('message', msg => {
           { name: '\u200b', value: '🇬 '+ret.G.join(" ")},
         )
         .setTimestamp()
-        .setFooter('星期'+weekday[weekIndex]+'的boss 7:30'+timetable[weekIndex][0]+' '+timetable[weekIndex][1]+' | 9:30 '+timetable[weekIndex][2]+ ' '+timetable[weekIndex][3], bot.user.avatarURL());
+        .setFooter('星期'+weekday[weekIndex]+'的boss 7:30 '+timetable[weekIndex][0]+' '+timetable[weekIndex][1]+' | 9:30 '+timetable[weekIndex][2]+ ' '+timetable[weekIndex][3], bot.user.avatarURL());
         msg.channel.send(embed);
       })
       .catch(error=>{
