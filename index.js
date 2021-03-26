@@ -16,7 +16,7 @@ var job = new CronJob('0 0 * * MON', function() {
 }, null, true, 'Asia/Taipei');
 
 var keepAwake = new CronJob('*/25 * * * *', function() {
-	fetch("https://billy-gay-bot.herokuapp.com/",{method: "HEAD"})
+	fetch("https://billy-gay-bot.herokuapp.com/availability",{method: "HEAD"})
 	.then(response => {
 		console.log("bossBot's status: "+response.status+" "+response.statusText);
 	});
@@ -78,24 +78,37 @@ bot.on('message', msg => {
 });
 
 
+const pgp = require('pg-promise')();
+const db = pgp(process.env.DATABASE_URL);
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
  
-app.get('/players', function (req, res) {
-  res.send('Hello World')
-  res.sendStatus(200);
-})
-
-app.head ("/availability", function (req, res) {
+app.head ("/availability", function (req, res) {  //availability or keep awake
   res.sendStatus(200);
 }) 
 
-app.post('/players', (req, res) => {
+app.get('/players', function (req, res) {  //get records
+  res.write('Hi');
+  res.sendStatus(200);
+})
+
+app.post('/players', (req, res) => {      //add records
   console.log('Got body:', req.body);
   res.sendStatus(200);
 });
+
+app.patch('/players', function (req, res) { //update records
+  res.sendStatus(200);
+})
+
+app.delete('/players', function (req, res) {  //delete records
+  res.sendStatus(200);
+})
+
+
 
 app.listen(process.env.PORT || 3000,()=>{
   console.log("API is running.");
