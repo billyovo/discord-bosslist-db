@@ -1,5 +1,6 @@
 # discord-bosslist-bot
 A discord bot to remind and summarise your town bosses.
+(fork db)
 
 ## To Use
 Fill in the config.json, bossChannelID will be the channel you want the boss to send the messages. 
