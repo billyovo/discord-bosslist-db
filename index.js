@@ -91,7 +91,6 @@ app.head ("/availability", function (req, res) {  //availability or keep awake
 }) 
 
 app.get('/players', function (req, res) {  //get records
-  res.write('Hi');
   res.sendStatus(200);
 })
 
