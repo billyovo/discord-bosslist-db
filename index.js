@@ -15,6 +15,15 @@ var job = new CronJob('0 0 * * MON', function() {
   sendBossMessage();
 }, null, true, 'Asia/Taipei');
 
+var keepAwake = new CronJob('*/25 * * * *', function() {
+	fetch("https://discord-bosslist-bot.herokuapp.com/",{method: "HEAD"})
+	.then(response => {
+		console.log("bossBot's status: "+response.status+" "+response.statusText);
+	});
+  }, null, true, 'Asia/Taipei');
+
+keepAwake.start();
+
 job.start();
 
 bot.login(TOKEN);
