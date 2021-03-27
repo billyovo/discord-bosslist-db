@@ -98,6 +98,8 @@ async function sendBossMessage(){
 
 const bossReactions = ['🇦','🇧','🇨','🇩','🇪','🇫','🇬'];
 bot.on('messageReactionAdd', (reaction, user) => {
+  console.log(reaction.message.id);
+  console.log(reaction.emoji);
   if(reaction.message.id !== '823224436789346304'){ return; }
   if(!bossReactions.includes(reaction.emoji)){ return;}
 
