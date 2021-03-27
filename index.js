@@ -9,6 +9,8 @@ const PREFIX = config.prefix;
 
 const bossChannelID = config.bossChannelID;
 const prefix_len = PREFIX.length;
+
+let bossMessageID;
 //'0 0 * * MON'
 var CronJob = require('cron').CronJob;
 //var job = new CronJob('0 0 * * MON', function() {
@@ -38,6 +40,9 @@ bot.on('ready', () => {
       console.log("Boss channel is not found! Fix your config.");
       bot.destroy();
   }
+
+  bossMessageID = fetchBossMessage().id;
+  console.log(bossMessageID);
 });
 
 function fetchBossChannel(){
@@ -49,6 +54,47 @@ async function fetchBossMessage(){
   let messages = await bossChannel.messages.fetchPinned();
   let bossMessage = await bossChannel.messages.fetch(messages.filter(message => message.author === bot.user).first().id,true,true);
   return bossMessage;
+}
+
+async function sendBossMessage(){
+  let bossChannel = fetchBossChannel();
+  let oldBossMessage = await fetchBossMessage();
+  bossChannel.send("@everyone")
+  .then((message)=>{
+    message.delete();
+  })
+
+  const embed = new Discord.MessageEmbed()
+  .setColor('#ffff00')
+  .setTitle('新的一周開始了!')
+  .setURL(config.bossWebsiteURL)
+  .setDescription('@everyone 請給反應你要哪隻boss~')
+  .addFields(
+    { name: '\u200b', value: '🇦 寒冰魔女', inline: true },
+    { name: '\u200b', value: '🇧 森法王', inline: true },
+    { name: '\u200b', value: '🇨 夢魘虛影', inline: true },
+    { name: '\u200b', value: '🇩 淵海噬者', inline: true },
+    { name: '\u200b', value: '🇪 元素魔方', inline: true },
+    { name: '\u200b', value: '🇫 幻雪守衛', inline: true },
+    { name: '\u200b', value: '🇬 荒漠亡靈', inline: true },
+  )
+  .setTimestamp()
+  .setFooter('新的一周快樂', bot.user.avatarURL());
+
+  await oldBossMessage.unpin();
+  await bossChannel.send(embed)
+  .then(async(newMessage)=>{
+      await newMessage.pin();
+      await newMessage.react("🇦");
+      await newMessage.react("🇧");
+      await newMessage.react("🇨");
+      await newMessage.react("🇩");
+      await newMessage.react("🇪");
+      await newMessage.react("🇫");
+      await newMessage.react("🇬");
+      bossMessageID = await fetchBossMessage().id;
+  })  
+  
 }
 
 
