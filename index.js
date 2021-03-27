@@ -42,6 +42,7 @@ bot.on('ready', async () => {
   }
 
   bossMessageID = await fetchBossMessage().id;
+  console.log(bossMessageID);
 });
 
 function fetchBossChannel(){
