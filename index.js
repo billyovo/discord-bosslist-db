@@ -78,12 +78,16 @@ bot.on('message', msg => {
 });
 
 
-const pgp = require('pg-promise')();
-pgp.pg.defaults.ssl = {
-      rejectUnauthorized: false
- }
-pgp.pg.defaults.ssl = true;
-const db = pgp(process.env.DATABASE_URL);
+const { Client } = require('pg');
+
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+
+client.connect();
 
 
 const express = require('express');
@@ -95,15 +99,15 @@ app.head ("/availability", function (req, res) {  //availability or keep awake
   res.sendStatus(200);
 }) 
 
-app.get('/players', function (req, res) {  //get records
-  db.any('SELECT player.*, boss01.boss AS boss1, boss01.hitted AS hitted1, boss02.boss AS boss2, boss02.hitted AS hitted2 FROM player INNER JOIN boss01 ON player.name = boss01.name INNER JOIN boss02 ON player.name = boss02.name', [true])
-    .then(function(data) {
-        res.status(200).send(JSON.stringify(data));
-    })
-    .catch(function(error) {
-	console.log(error);
-        res.sendStatus(500);
-    });
+app.get('/players', function (req, response) {  //get records
+  client.query('SELECT player.*, boss01.boss AS boss1, boss01.hitted AS hitted1, boss02.boss AS boss2, boss02.hitted AS hitted2 FROM player INNER JOIN boss01 ON player.name = boss01.name INNER JOIN boss02 ON player.name = boss02.name;', (err, res) => {
+    if (err) throw err;
+    for (let row of res.rows) {
+      console.log(JSON.stringify(row));
+    }
+    response.status(200).send(res);
+  });
+  
 })
 
 app.post('/players', (req, res) => {      //add records
