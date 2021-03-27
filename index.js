@@ -161,9 +161,44 @@ bot.on('messageReactionAdd', async (reaction, user) => {
   }
 });
 
-bot.on('messageReactionRemove', (reaction, user) => {
-  console.log('a reaction has been removed');
+bot.on('messageReactionRemove', async (reaction, user) => {
+  if(reaction.message.id !== '823224436789346304'){ return; }
+  if(user.bot){return;}
+  if(!bossReactions.includes(reaction.emoji.name)){ return;}
+
+  const secondBossMatch = `EXISTS (SELECT FROM boss02 WHERE name = '${user.username}' AND boss = '${mapEmojiToLetter(reaction.emoji.name)}')`;
+  const firstBossMatch = `EXISTS (SELECT FROM boss01 WHERE name = '${user.username}' AND boss = '${mapEmojiToLetter(reaction.emoji.name)}')`;
+  const hasSecondBoss = `EXISTS (SELECT FROM boss02 WHERE name = '${user.username}')`;
+  const deleteSecondBoss = `DELETE FROM boss02 WHERE name = '${user.username}'`;
+  const replaceFirstBoss = `UPDATE boss01 SET boss = (SELECT boss FROM boss02 WHERE name = '${user.username}') WHERE name = '${user.username}'`;
+  const replaceHitted = `UPDATE boss01 SET hitted = (SELECT hitted FROM boss02 WHERE name = '${user.username}') WHERE name = '${user.username}'`;
+  const query = `
+                DO $$
+                BEGIN 
+                IF (${secondBossMatch}) THEN
+                    ${deleteSecondBoss};
+                ELSE
+                    IF(${firstBossMatch}) THEN
+                      IF(${hasSecondBoss}) THEN
+                        ${replaceFirstBoss};
+                        ${replaceHitted};
+                        ${deleteSecondBoss};
+                      END IF;
+                    END IF;
+                END IF;
+                END $$;
+              `;
+  try{
+    await client.query('BEGIN');
+    await client.query(query);
+    await client.query('COMMIT');
+  }
+  catch(error){
+    reaction.users.remove(user);
+    client.query('ROLLBACK');
+  }
 });
+
 bot.on('message', msg => {
 
   if(!msg.content.startsWith(PREFIX)){return;}
