@@ -96,14 +96,71 @@ async function sendBossMessage(){
   
 }
 
+function mapEmojiToLetter(emoji){
+  switch(emoji){
+    case '🇦':{
+      return 'A';
+    }
+    case '🇧':{
+      return 'B';
+    }
+    case '🇨':{
+      return 'C';
+    }
+    case '🇩':{
+      return 'D';
+    }
+    case '🇪':{
+      return 'E';
+    }
+    case '🇫':{
+      return 'F';
+    }
+    case '🇬':{
+      return 'G';
+    }
+  }
+}
+
 const bossReactions = ['🇦','🇧','🇨','🇩','🇪','🇫','🇬'];
+
 bot.on('messageReactionAdd', (reaction, user) => {
   if(reaction.message.id !== '823224436789346304'){ return; }
+  if(user.bot){return;}
   if(!bossReactions.includes(reaction.emoji.name)){ return;}
 
-  console.log('yes');
+  console.log(user.username);
+  const hasSecondBoss = format('EXISTS (SELECT FROM boss02 WHERE name = %L)', user.username);
+  const hasFirstBoss = format('EXISTS (SELECT FROM boss01 WHERE name = %L)', user.username);
+  const insertPlayer = format('INSERT INTO player (name,id,avatar) VALUES(%L, %L, %L)',user.username,user.id,user.avatarURL());
+  const insertFirstBoss = format('INSERT INTO boss01 (name,boss,hitted) VALUES(%L, %L, %L)',user.username,mapEmojiToLetter(reaction.emoji.name),false);
+  const insertSecondBoss = format('INSERT INTO boss02 (name,boss,hitted) VALUES(%L, %L, %L)',user.username,mapEmojiToLetter(reaction.emoji.name),false);
+  const query = `
+                DO $$
+                BEGIN 
+                IF (${hasSecondBoss}) THEN
+                    RAISE EXCEPTION '${user.username} already exist!';
+                ELSE
+                    IF(${hasFirstBoss}) THEN
+                      ${insertSecondBoss};
+                    ELSE
+                      ${insertPlayer};
+                      ${insertFirstBoss};
+                    END IF;
+                END IF;
+                END $$;
+              `;
 
-
+  try{
+    client.query('BEGIN');
+    client.query(query);
+    client.query('COMMIT');
+  }
+  catch(error){
+    console.error(error);
+    reaction.remove(user);
+    client.query('ROLLBACK');
+  }
 });
 
 bot.on('messageReactionRemove', (reaction, user) => {
