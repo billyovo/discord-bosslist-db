@@ -156,8 +156,7 @@ bot.on('messageReactionAdd', async (reaction, user) => {
     await client.query('COMMIT');
   }
   catch(error){
-    console.error(error);
-    reaction.remove(user);
+    reaction.users.remove(user);
     client.query('ROLLBACK');
   }
 });
