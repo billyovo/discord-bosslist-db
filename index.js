@@ -42,7 +42,6 @@ bot.on('ready', async () => {
   }
 
   bossMessageID = await fetchBossMessage().id;
-  console.log(bossMessageID);
 });
 
 function fetchBossChannel(){
@@ -52,7 +51,7 @@ function fetchBossChannel(){
 async function fetchBossMessage(){
   let bossChannel = fetchBossChannel();
   let messages = await bossChannel.messages.fetchPinned();
-  let bossMessage = await bossChannel.messages.fetch(messages.filter(message => (message.author === bot.user) || (message.author.id === '534985012089716736')).first().id,true,true);
+  let bossMessage = await bossChannel.messages.fetch(messages.filter(message => (message.author === bot.user)).first().id,true,true);
   return bossMessage;
 }
 
@@ -97,7 +96,19 @@ async function sendBossMessage(){
   
 }
 
+const bossReactions = ['🇦','🇧','🇨','🇩','🇪','🇫','🇬'];
+client.on('messageReactionAdd', (reaction, user) => {
+  if(reaction.message.id !== '823224436789346304'){ return; }
+  if(!bossReactions.includes(reaction.emoji)){ return;}
 
+  console.log('yes');
+
+
+});
+
+client.on('messageReactionRemove', (reaction, user) => {
+  console.log('a reaction has been removed');
+});
 bot.on('message', msg => {
 
   if(!msg.content.startsWith(PREFIX)){return;}
