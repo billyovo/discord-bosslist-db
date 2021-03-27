@@ -97,7 +97,7 @@ async function sendBossMessage(){
 }
 
 const bossReactions = ['🇦','🇧','🇨','🇩','🇪','🇫','🇬'];
-client.on('messageReactionAdd', (reaction, user) => {
+bot.on('messageReactionAdd', (reaction, user) => {
   if(reaction.message.id !== '823224436789346304'){ return; }
   if(!bossReactions.includes(reaction.emoji)){ return;}
 
@@ -106,7 +106,7 @@ client.on('messageReactionAdd', (reaction, user) => {
 
 });
 
-client.on('messageReactionRemove', (reaction, user) => {
+bot.on('messageReactionRemove', (reaction, user) => {
   console.log('a reaction has been removed');
 });
 bot.on('message', msg => {
