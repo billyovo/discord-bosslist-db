@@ -129,12 +129,11 @@ bot.on('messageReactionAdd', (reaction, user) => {
   if(user.bot){return;}
   if(!bossReactions.includes(reaction.emoji.name)){ return;}
 
-  console.log(user.username);
-  const hasSecondBoss = format('EXISTS (SELECT FROM boss02 WHERE name = %L)', user.username);
-  const hasFirstBoss = format('EXISTS (SELECT FROM boss01 WHERE name = %L)', user.username);
-  const insertPlayer = format('INSERT INTO player (name,id,avatar) VALUES(%L, %L, %L)',user.username,user.id,user.avatarURL());
-  const insertFirstBoss = format('INSERT INTO boss01 (name,boss,hitted) VALUES(%L, %L, %L)',user.username,mapEmojiToLetter(reaction.emoji.name),false);
-  const insertSecondBoss = format('INSERT INTO boss02 (name,boss,hitted) VALUES(%L, %L, %L)',user.username,mapEmojiToLetter(reaction.emoji.name),false);
+  const hasSecondBoss = "format('EXISTS (SELECT FROM boss02 WHERE name = %L)', user.username)";
+  const hasFirstBoss = "format('EXISTS (SELECT FROM boss01 WHERE name = %L)', user.username)";
+  const insertPlayer = "format('INSERT INTO player (name,id,avatar) VALUES(%L, %L, %L)',user.username,user.id,user.avatarURL())";
+  const insertFirstBoss = "format('INSERT INTO boss01 (name,boss,hitted) VALUES(%L, %L, %L)',user.username,mapEmojiToLetter(reaction.emoji.name),false)";
+  const insertSecondBoss = "format('INSERT INTO boss02 (name,boss,hitted) VALUES(%L, %L, %L)',user.username,mapEmojiToLetter(reaction.emoji.name),false)";
   const query = `
                 DO $$
                 BEGIN 
