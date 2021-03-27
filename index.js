@@ -11,9 +11,9 @@ const bossChannelID = config.bossChannelID;
 const prefix_len = PREFIX.length;
 //'0 0 * * MON'
 var CronJob = require('cron').CronJob;
-var job = new CronJob('0 0 * * MON', function() {
-  sendBossMessage();
-}, null, true, 'Asia/Taipei');
+//var job = new CronJob('0 0 * * MON', function() {
+//  sendBossMessage();
+//}, null, true, 'Asia/Taipei');
 
 var keepAwake = new CronJob('*/25 * * * *', function() {
 	fetch("https://billy-gay-bot.herokuapp.com/availability",{method: "HEAD"})
@@ -23,7 +23,7 @@ var keepAwake = new CronJob('*/25 * * * *', function() {
   }, null, true, 'Asia/Taipei');
 
 keepAwake.start();
-job.start();
+//job.start();
 
 bot.login(TOKEN);
 
@@ -97,6 +97,7 @@ app.get('/players', function (req, res) {  //get records
     })
     .catch(function(error) {
         res.sendStatus(500);
+	console.log(error);
     });
 })
 
