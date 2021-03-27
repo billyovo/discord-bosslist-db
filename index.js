@@ -51,7 +51,7 @@ function fetchBossChannel(){
 async function fetchBossMessage(){
   let bossChannel = fetchBossChannel();
   let messages = await bossChannel.messages.fetchPinned();
-  let bossMessage = await bossChannel.messages.fetch(messages.filter(message => (message.author === bot.user)).first().id,true,true);
+  let bossMessage = await bossChannel.messages.fetch(messages.filter(message => (message.author === bot.user)||message.id === '823224436789346304').first().id,true,true);
   return bossMessage;
 }
 
