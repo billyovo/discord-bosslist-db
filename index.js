@@ -124,7 +124,7 @@ function mapEmojiToLetter(emoji){
 
 const bossReactions = ['🇦','🇧','🇨','🇩','🇪','🇫','🇬'];
 
-bot.on('messageReactionAdd', (reaction, user) => {
+bot.on('messageReactionAdd', async (reaction, user) => {
   if(reaction.message.id !== '823224436789346304'){ return; }
   if(user.bot){return;}
   if(!bossReactions.includes(reaction.emoji.name)){ return;}
@@ -151,9 +151,9 @@ bot.on('messageReactionAdd', (reaction, user) => {
               `;
 
   try{
-    client.query('BEGIN');
-    client.query(query);
-    client.query('COMMIT');
+    await client.query('BEGIN');
+    await client.query(query);
+    await client.query('COMMIT');
   }
   catch(error){
     console.error(error);
