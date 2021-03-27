@@ -172,6 +172,8 @@ bot.on('messageReactionRemove', async (reaction, user) => {
   const deleteSecondBoss = `DELETE FROM boss02 WHERE name = '${user.username}'`;
   const replaceFirstBoss = `UPDATE boss01 SET boss = (SELECT boss FROM boss02 WHERE name = '${user.username}') WHERE name = '${user.username}'`;
   const replaceHitted = `UPDATE boss01 SET hitted = (SELECT hitted FROM boss02 WHERE name = '${user.username}') WHERE name = '${user.username}'`;
+  const deleteFirstBoss = `DELETE FROM boss01 WHERE name = '${user.username}'`;
+  const deletePlayer = `DELETE FROM player WHERE name = '${user.username}'`;
   const query = `
                 DO $$
                 BEGIN 
@@ -183,6 +185,9 @@ bot.on('messageReactionRemove', async (reaction, user) => {
                         ${replaceFirstBoss};
                         ${replaceHitted};
                         ${deleteSecondBoss};
+                      ELSE
+                        ${deleteFirstBoss};
+                        ${deletePlayer};
                       END IF;
                     END IF;
                 END IF;
