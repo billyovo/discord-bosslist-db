@@ -102,10 +102,7 @@ app.head ("/availability", function (req, res) {  //availability or keep awake
 app.get('/players', function (req, response) {  //get records
   client.query('SELECT player.*, boss01.boss AS boss1, boss01.hitted AS hitted1, boss02.boss AS boss2, boss02.hitted AS hitted2 FROM player INNER JOIN boss01 ON player.name = boss01.name INNER JOIN boss02 ON player.name = boss02.name;', (err, res) => {
     if (err) throw err;
-    for (let row of res.rows) {
-      console.log(JSON.stringify(row));
-    }
-    response.status(200).send(res);
+    response.status(200).send(res.rows);
   });
   
 })
