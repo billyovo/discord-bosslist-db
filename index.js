@@ -29,7 +29,7 @@ keepAwake.start();
 
 bot.login(TOKEN);
 
-bot.on('ready', () => {
+bot.on('ready', async () => {
   console.info("Discord SiuMui online");
   bot.user.setActivity('boss 時間表', { type: 'WATCHING' });
     let bossChannel = fetchBossChannel();
@@ -41,8 +41,7 @@ bot.on('ready', () => {
       bot.destroy();
   }
 
-  bossMessageID = fetchBossMessage().id;
-  console.log(bossMessageID);
+  bossMessageID = await fetchBossMessage().id;
 });
 
 function fetchBossChannel(){
@@ -52,9 +51,7 @@ function fetchBossChannel(){
 async function fetchBossMessage(){
   let bossChannel = fetchBossChannel();
   let messages = await bossChannel.messages.fetchPinned();
-  console.log(messages);
-  console.log(bossChannel.messages);
-  let bossMessage = await bossChannel.messages.fetch(messages.first().id,true,true);
+  let bossMessage = await bossChannel.messages.fetch(messages.filter(message => (message.author === bot.user) || (message.author.id === '534985012089716736')).first().id,true,true);
   return bossMessage;
 }
 
@@ -99,13 +96,6 @@ async function sendBossMessage(){
   
 }
 
-bot.on('messageReactionAdd', (reaction, user) => {
-  console.log('a reaction has been added');
-});
-
-bot.on('messageReactionRemove', (reaction, user) => {
-  console.log('a reaction has been removed');
-});
 
 bot.on('message', msg => {
 
