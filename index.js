@@ -95,9 +95,9 @@ app.get('/players', function (req, res) {  //get records
   db.any('SELECT player.*, boss01.boss AS boss1, boss01.hitted AS hitted1, boss02.boss AS boss2, boss02.hitted AS hitted2 FROM player INNER JOIN boss01 ON player.name = boss01.name INNER JOIN boss02 ON player.name = boss02.name', [true])
     .then(function(data) {
         res.status(200).send(JSON.stringify(data));
-	console.log(error);
     })
     .catch(function(error) {
+	console.log(error);
         res.sendStatus(500);
     });
 })
