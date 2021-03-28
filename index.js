@@ -245,20 +245,23 @@ client.connect();
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 
+app.use(bodyParser.json());
+ 
 app.all('/*', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", process.env.ACCESS_ORIGIN);
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
 
-app.head ("/availability", function (req, res) {  //availability or keep awake
+app.head ("/availability", (req, res) => {  //availability or keep awake
   res.sendStatus(200);
 }) 
 
-app.get('/players', function (req, response) {  //get records
+app.get('/players', (req, response) => {  //get records
   client.query('SELECT player.*, boss01.boss AS boss1, boss01.hitted AS hitted1, boss02.boss AS boss2, boss02.hitted AS hitted2 FROM player INNER JOIN boss01 ON player.name = boss01.name INNER JOIN boss02 ON player.name = boss02.name;', (err, res) => {
     if (err){response.sendStatus(500)};
     response.status(200).send(res.rows);
@@ -266,17 +269,107 @@ app.get('/players', function (req, response) {  //get records
   
 })
 
-app.post('/players', (req, res) => {      //add records
-  console.log('Got body:', req.body);
-  res.sendStatus(200);
-});
+app.post('/players', async (req, response) => {      //add records
 
-app.patch('/players', function (req, res) { //update records
-  res.sendStatus(200);
+  const exists = `EXISTS (SELECT FROM player WHERE name = '${req.body.name}'`;
+  const insertPlayer = `INSERT INTO player (name,id,avatar) VALUES ('${req.body.name}','null','${req.body.avatar}')`;
+  const insertBoss1 = `INSERT INTO boss01 (name,boss,hitted) VALUES ('${req.body.name}','${req.body.boss01}','false')`;
+  const insertBoss2 = `INSERT INTO boss02 (name,boss,hitted) VALUES ('${req.body.name}','${req.body.boss02}','false')`;
+
+  const query = `
+                  DO $$
+                  BEGIN 
+                  IF (${exists}) THEN
+                    RAISE EXCEPTION '${req.body.name} already exist!';
+                  ELSE
+                    ${insertPlayer};
+                    ${insertBoss1};
+                    ${insertBoss2};
+                  END IF;
+                  END $$;
+                `;
+  try{
+    await client.query('BEGIN');
+    await client.query(query);
+    await client.query('COMMIT');
+    response.status(200).send(`${req.body.name} is added!`);
+  }
+  catch(error){
+    response.status(409).send(error.message);
+    client.query('ROLLBACK');
+  }
+
+  });
+
+
+app.patch('/players', async (req, response) => { //update records
+  let responseArray = [];
+
+  req.body.forEach(element => {
+    const exists = `NOT EXISTS (SELECT FROM player WHERE name = '${element.name}'`;
+    const updateBoss1 = `UPDATE boss01 SET boss = '${element.bossTo}' WHERE name = '${element.name}' AND boss = '${element.bossFrom}'`;
+    const updateBoss2 = `UPDATE boss02 SET boss = '${element.bossTo}' WHERE name = '${element.name}' AND boss = '${element.bossFrom}'`;
+    const query = `
+                    DO $$
+                    BEGIN 
+                    IF (${exists}) THEN
+                      RAISE EXCEPTION '${element.name} is not found!';
+                    ELSE
+                      ${updateBoss1};
+                      ${updateBoss2};
+                    END IF;
+                    END $$;
+                  `;
+    try{
+      await client.query('BEGIN');
+      await client.query(query);
+      await client.query('COMMIT');
+      responseArray.push({message: `${element.name} is updated`, status: '200'});
+    }
+    catch(error){
+      responseArray.push({message: `${error.message}`, status: '409'});
+      client.query('ROLLBACK');
+    }
+  });
+
+  response.status(200).send(JSON.stringify(responseArray));
 })
 
-app.delete('/players', function (req, res) {  //delete records
-  res.sendStatus(200);
+app.delete('/players', function (req, response) {  //delete records
+  let responseArray = [];
+
+  req.body.forEach(element => {
+    const exists = `NOT EXISTS (SELECT FROM player WHERE name = '${element.name}'`;
+    const removePlayer = `DELETE FROM player WHERE name = '${element.name}'`;
+    const removeBoss1 = `DELETE FROM boss01 WHERE name = '${element.name}'`;
+    const removeBoss2 = `DELETE FROM boss02 WHERE name = '${elemen.name}'`;
+    const query = `
+                    DO $$
+                    BEGIN 
+                    IF (${exists}) THEN
+                      RAISE EXCEPTION '${element.name} is not found!';
+                    ELSE
+                      ${removePlayer};
+                      ${removeBoss1};
+                      ${removeBoss2};
+                    END IF;
+                    END $$;
+                  `;
+    try{
+      await client.query('BEGIN');
+      await client.query(query);
+      await client.query('COMMIT');
+      responseArray.push({message: `${element.name} is deleted!`, status: '200'});
+    }
+    catch(error){
+      responseArray.push({message: `${error.message}`, status: '409'});
+      client.query('ROLLBACK');
+    }
+  });
+
+  response.status(200).send(JSON.stringify(responseArray));
+  
+
 })
 
 
