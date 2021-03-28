@@ -269,7 +269,7 @@ app.get('/players', (req, response) => {  //get records
   
 })
 
-app.post('/players', (req, response) => {      //add records
+app.post('/players', async (req, response) => {      //add records
 
   console.log(req.body.name);
   console.log(req.body.boss01);
@@ -292,9 +292,9 @@ app.post('/players', (req, response) => {      //add records
                   END $$;
                 `;
   try{
-    client.query('BEGIN');
-    client.query(query);
-    client.query('COMMIT');
+    await client.query('BEGIN');
+    await client.query(query);
+    await client.query('COMMIT');
     response.status(200).send(`${req.body.name} is added!`);
   }
   catch(error){
