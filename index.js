@@ -247,20 +247,25 @@ const bodyParser = require('body-parser');
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
  
+app.all('/*', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", process.env.ACCESS_ORIGIN);
+  next();
+});
+
 app.head ("/availability", function (req, res) {  //availability or keep awake
   res.sendStatus(200);
 }) 
 
 app.get('/players', function (req, response) {  //get records
   client.query('SELECT player.*, boss01.boss AS boss1, boss01.hitted AS hitted1, boss02.boss AS boss2, boss02.hitted AS hitted2 FROM player INNER JOIN boss01 ON player.name = boss01.name INNER JOIN boss02 ON player.name = boss02.name;', (err, res) => {
-    if (err) throw err;
+    if (err){response.sendStatus(500)};
     response.status(200).send(res.rows);
   });
   
 })
 
 app.post('/players', (req, res) => {      //add records
-  console.log(req);
+  console.log('Got body:', req.body);
   res.sendStatus(200);
 });
 
