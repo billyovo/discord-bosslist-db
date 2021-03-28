@@ -42,6 +42,7 @@ bot.on('ready', async () => {
   }
 
   bossMessageID = await fetchBossMessage().id;
+  console.log(bossMessageID);
 });
 
 function fetchBossChannel(){
@@ -51,7 +52,7 @@ function fetchBossChannel(){
 async function fetchBossMessage(){
   let bossChannel = fetchBossChannel();
   let messages = await bossChannel.messages.fetchPinned();
-  let bossMessage = await bossChannel.messages.fetch(messages.filter(message => (message.author === bot.user)||message.id === '823224436789346304').first().id,true,true);
+  let bossMessage = await bossChannel.messages.fetch(messages.filter(message => (message.author.id == '534985012089716736')).first().id,true,true);
   return bossMessage;
 }
 
@@ -125,7 +126,7 @@ function mapEmojiToLetter(emoji){
 const bossReactions = ['🇦','🇧','🇨','🇩','🇪','🇫','🇬'];
 
 bot.on('messageReactionAdd', async (reaction, user) => {
-  if(reaction.message.id !== '823224436789346304'){ return; }
+  if(reaction.message.author.id !== ''){ return; }
   if(user.bot){return;}
   if(!bossReactions.includes(reaction.emoji.name)){ return;}
 
