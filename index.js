@@ -52,7 +52,7 @@ function fetchBossChannel(){
 async function fetchBossMessage(){
   let bossChannel = fetchBossChannel();
   let messages = await bossChannel.messages.fetchPinned();
-  return messages.first.id();
+  return messages.first().id;
 }
 
 async function sendBossMessage(){
