@@ -11,7 +11,7 @@ const bossChannelID = config.bossChannelID;
 const prefix_len = PREFIX.length;
 
 let bossMessageID;
-//'0 0 * * MON'
+
 var CronJob = require('cron').CronJob;
 //var job = new CronJob('0 0 * * MON', function() {
 //  sendBossMessage();
@@ -379,5 +379,5 @@ app.post('/delete-players', (req, response) => {  //delete records
 
 
 app.listen(process.env.PORT || 3000,()=>{
-  console.log("API is running.");
+  
 });
