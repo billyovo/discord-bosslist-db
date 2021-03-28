@@ -271,10 +271,7 @@ app.get('/players', (req, response) => {  //get records
 
 app.post('/players', async (req, response) => {      //add records
 
-  console.log(req.body.name);
-  console.log(req.body.boss01);
-
-  const exists = `EXISTS (SELECT FROM player WHERE name = '${req.body.name}'`;
+  const exists = `EXISTS (SELECT FROM player WHERE name = '${req.body.name})'`;
   const insertPlayer = `INSERT INTO player (name,id,avatar) VALUES ('${req.body.name}','null','${req.body.avatar}')`;
   const insertBoss1 = `INSERT INTO boss01 (name,boss,hitted) VALUES ('${req.body.name}','${req.body.boss01}','false')`;
   const insertBoss2 = `INSERT INTO boss02 (name,boss,hitted) VALUES ('${req.body.name}','${req.body.boss02}','false')`;
@@ -309,7 +306,7 @@ app.patch('/players', async (req, response) => { //update records
   let responseArray = [];
 
   req.body.forEach((element) => {
-    const exists = `NOT EXISTS (SELECT FROM player WHERE name = '${element.name}'`;
+    const exists = `NOT EXISTS (SELECT FROM player WHERE name = '${element.name}')`;
     const updateBoss1 = `UPDATE boss01 SET boss = '${element.bossTo}' WHERE name = '${element.name}' AND boss = '${element.bossFrom}'`;
     const updateBoss2 = `UPDATE boss02 SET boss = '${element.bossTo}' WHERE name = '${element.name}' AND boss = '${element.bossFrom}'`;
     const query = `
@@ -343,7 +340,7 @@ app.post('/delete-players', async(req, response) => {  //delete records
 
   req.body.forEach((element) => {
     console.log(element);
-    const exists = `NOT EXISTS (SELECT FROM player WHERE name = '${element.name}'`;
+    const exists = `NOT EXISTS (SELECT FROM player WHERE name = '${element.name}')`;
     const removePlayer = `DELETE FROM player WHERE name = '${element.name}'`;
     const removeBoss1 = `DELETE FROM boss01 WHERE name = '${element.name}'`;
     const removeBoss2 = `DELETE FROM boss02 WHERE name = '${elemen.name}'`;
