@@ -52,6 +52,7 @@ function fetchBossChannel(){
 async function fetchBossMessage(){
   let bossChannel = fetchBossChannel();
   let messages = await bossChannel.messages.fetchPinned();
+  console.log(messages.first());
   let bossMessage = await bossChannel.messages.fetch(messages.first().id,true,true);
   return bossMessage;
 }
