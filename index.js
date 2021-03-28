@@ -251,7 +251,7 @@ app.use(bodyParser.urlencoded({
 
 app.use(bodyParser.json());
  
-app.all('/*', function(req, res, next) {
+app.all('/*', (req, res, next) => {
   res.header("Access-Control-Allow-Origin", process.env.ACCESS_ORIGIN);
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
@@ -335,7 +335,7 @@ app.patch('/players', async (req, response) => { //update records
   response.status(200).send(JSON.stringify(responseArray));
 })
 
-app.delete('/players', function (req, response) {  //delete records
+app.delete('/players', async(req, response) => {  //delete records
   let responseArray = [];
 
   req.body.forEach(element => {
