@@ -270,17 +270,20 @@ app.get('/players', (req, response) => {  //get records
 })
 
 app.post('/players', async (req, response) => {      //add records
-
-  const exists = `EXISTS (SELECT FROM player WHERE name = '${req.body.name}')`;
-  const insertPlayer = `INSERT INTO player (name,id,avatar) VALUES ('${req.body.name}','null','${req.body.avatar}')`;
-  const insertBoss1 = `INSERT INTO boss01 (name,boss,hitted) VALUES ('${req.body.name}','${req.body.boss01}','false')`;
-  const insertBoss2 = `INSERT INTO boss02 (name,boss,hitted) VALUES ('${req.body.name}','${req.body.boss02}','false')`;
+  let name = req.body.name.trim();
+  let boss01 = req.body.boss01.trim();
+  let boss02 = req.body.boss02.trim();
+  
+  const exists = `EXISTS (SELECT FROM player WHERE name = '${name}')`;
+  const insertPlayer = `INSERT INTO player (name,id,avatar) VALUES ('${name}','null','${req.body.avatar}')`;
+  const insertBoss1 = `INSERT INTO boss01 (name,boss,hitted) VALUES ('${name}','${boss01}','false')`;
+  const insertBoss2 = `INSERT INTO boss02 (name,boss,hitted) VALUES ('${name}','${boss02}','false')`;
 
   const query = `
                   DO $$
                   BEGIN 
                   IF (${exists}) THEN
-                    RAISE EXCEPTION '${req.body.name} already exist!';
+                    RAISE EXCEPTION '${name} already exist!';
                   ELSE
                     ${insertPlayer};
                     ${insertBoss1};
@@ -292,7 +295,7 @@ app.post('/players', async (req, response) => {      //add records
     await client.query('BEGIN');
     await client.query(query);
     await client.query('COMMIT');
-    response.status(200).send(`${req.body.name} is added!`);
+    response.status(200).send(`${name} is added!`);
   }
   catch(error){
     response.status(409).send(error.message);
@@ -339,16 +342,16 @@ app.post('/delete-players', (req, response) => {  //delete records
   let responseArray = [];
 
   req.body.forEach( (element) => {
-    console.log(element);
-    const exists = `NOT EXISTS (SELECT FROM player WHERE name = '${element.name}')`;
-    const removePlayer = `DELETE FROM player WHERE name = '${element.name}'`;
-    const removeBoss1 = `DELETE FROM boss01 WHERE name = '${element.name}'`;
-    const removeBoss2 = `DELETE FROM boss02 WHERE name = '${element.name}'`;
+    let name = element.name.trim();
+    const exists = `NOT EXISTS (SELECT FROM player WHERE name = '${name}')`;
+    const removePlayer = `DELETE FROM player WHERE name = '${name}'`;
+    const removeBoss1 = `DELETE FROM boss01 WHERE name = '${name}'`;
+    const removeBoss2 = `DELETE FROM boss02 WHERE name = '${name}'`;
     const query = `
                     DO $$
                     BEGIN 
                     IF (${exists}) THEN
-                      RAISE EXCEPTION '${element.name} is not found!';
+                      RAISE EXCEPTION '${name} is not found!';
                     ELSE
                       ${removePlayer};
                       ${removeBoss1};
@@ -360,7 +363,7 @@ app.post('/delete-players', (req, response) => {  //delete records
       client.query('BEGIN');
       client.query(query);
       client.query('COMMIT');
-      responseArray.push({message: `${element.name} is deleted!`, status: '200'});
+      responseArray.push({message: `${name} is deleted!`, status: '200'});
     }
     catch(error){
       responseArray.push({message: `${error.message}`, status: '409'});
