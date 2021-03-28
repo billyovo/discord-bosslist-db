@@ -302,10 +302,10 @@ app.post('/players', async (req, response) => {      //add records
   });
 
 
-app.patch('/players', async (req, response) => { //update records
+app.patch('/players', (req, response) => { //update records
   let responseArray = [];
 
-  req.body.forEach(async (element) => {
+    req.body.forEach((element) => {
     const exists = `NOT EXISTS (SELECT FROM player WHERE name = '${element.name}')`;
     const updateBoss1 = `UPDATE boss01 SET boss = '${element.bossTo}' WHERE name = '${element.name}' AND boss = '${element.bossFrom}'`;
     const updateBoss2 = `UPDATE boss02 SET boss = '${element.bossTo}' WHERE name = '${element.name}' AND boss = '${element.bossFrom}'`;
@@ -321,9 +321,9 @@ app.patch('/players', async (req, response) => { //update records
                     END $$;
                   `;
     try{
-      await client.query('BEGIN');
-      await client.query(query);
-      await client.query('COMMIT');
+      client.query('BEGIN');
+      client.query(query);
+      client.query('COMMIT');
       responseArray.push({message: `${element.name} is updated`, status: '200'});
     }
     catch(error){
@@ -335,10 +335,10 @@ app.patch('/players', async (req, response) => { //update records
   response.status(200).send(JSON.stringify(responseArray));
 })
 
-app.post('/delete-players', async(req, response) => {  //delete records
+app.post('/delete-players', (req, response) => {  //delete records
   let responseArray = [];
 
-  req.body.forEach(async (element) => {
+  req.body.forEach( (element) => {
     console.log(element);
     const exists = `NOT EXISTS (SELECT FROM player WHERE name = '${element.name}')`;
     const removePlayer = `DELETE FROM player WHERE name = '${element.name}'`;
@@ -357,9 +357,9 @@ app.post('/delete-players', async(req, response) => {  //delete records
                     END $$;
                   `;
     try{
-      await client.query('BEGIN');
-      await client.query(query);
-      await client.query('COMMIT');
+      client.query('BEGIN');
+      client.query(query);
+      client.query('COMMIT');
       responseArray.push({message: `${element.name} is deleted!`, status: '200'});
     }
     catch(error){
