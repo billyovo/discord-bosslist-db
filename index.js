@@ -337,8 +337,9 @@ app.patch('/players', async (req, response) => { //update records
 
 app.delete('/players', async(req, response) => {  //delete records
   let responseArray = [];
-
+	
   req.body.forEach(async (element) => {
+    console.log(element);
     const exists = `NOT EXISTS (SELECT FROM player WHERE name = '${element.name}'`;
     const removePlayer = `DELETE FROM player WHERE name = '${element.name}'`;
     const removeBoss1 = `DELETE FROM boss01 WHERE name = '${element.name}'`;
