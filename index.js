@@ -271,7 +271,7 @@ app.get('/players', (req, response) => {  //get records
 
 app.post('/players', async (req, response) => {      //add records
 
-  const exists = `EXISTS (SELECT FROM player WHERE name = '${req.body.name})'`;
+  const exists = `EXISTS (SELECT FROM player WHERE name = '${req.body.name}')`;
   const insertPlayer = `INSERT INTO player (name,id,avatar) VALUES ('${req.body.name}','null','${req.body.avatar}')`;
   const insertBoss1 = `INSERT INTO boss01 (name,boss,hitted) VALUES ('${req.body.name}','${req.body.boss01}','false')`;
   const insertBoss2 = `INSERT INTO boss02 (name,boss,hitted) VALUES ('${req.body.name}','${req.body.boss02}','false')`;
