@@ -343,7 +343,7 @@ app.post('/delete-players', async(req, response) => {  //delete records
     const exists = `NOT EXISTS (SELECT FROM player WHERE name = '${element.name}')`;
     const removePlayer = `DELETE FROM player WHERE name = '${element.name}'`;
     const removeBoss1 = `DELETE FROM boss01 WHERE name = '${element.name}'`;
-    const removeBoss2 = `DELETE FROM boss02 WHERE name = '${elemen.name}'`;
+    const removeBoss2 = `DELETE FROM boss02 WHERE name = '${element.name}'`;
     const query = `
                     DO $$
                     BEGIN 
