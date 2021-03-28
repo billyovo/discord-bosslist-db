@@ -41,7 +41,7 @@ bot.on('ready', async () => {
       bot.destroy();
   }
 
-  bossMessageID = await fetchBossMessage().id;
+  bossMessageID = await fetchBossMessage();
   console.log(bossMessageID);
 });
 
@@ -52,9 +52,7 @@ function fetchBossChannel(){
 async function fetchBossMessage(){
   let bossChannel = fetchBossChannel();
   let messages = await bossChannel.messages.fetchPinned();
-  console.log(messages.first().id);
-  let bossMessage = await bossChannel.messages.fetch(messages.first().id,true,true);
-  return bossMessage;
+  return messages.first.id();
 }
 
 async function sendBossMessage(){
