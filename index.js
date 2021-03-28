@@ -260,7 +260,7 @@ app.get('/players', function (req, response) {  //get records
 })
 
 app.post('/players', (req, res) => {      //add records
-  console.log('Got body:', req.body);
+  console.log(req);
   res.sendStatus(200);
 });
 
