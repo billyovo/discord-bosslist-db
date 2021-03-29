@@ -13,19 +13,12 @@ const prefix_len = PREFIX.length;
 let bossMessageID;
 
 var CronJob = require('cron').CronJob;
-//var job = new CronJob('0 0 * * MON', function() {
-//  sendBossMessage();
-//}, null, true, 'Asia/Taipei');
+var job = new CronJob('0 0 * * MON', function() {
+  sendBossMessage();
+}, null, true, 'Asia/Taipei');
 
-var keepAwake = new CronJob('*/25 * * * *', function() {
-	fetch("https://billy-gay-bot.herokuapp.com/availability",{method: "HEAD"})
-	.then(response => {
-		console.log("bossBot's status: "+response.status+" "+response.statusText);
-	});
-  }, null, true, 'Asia/Taipei');
 
-keepAwake.start();
-//job.start();
+job.start();
 
 bot.login(TOKEN);
 
@@ -40,9 +33,12 @@ bot.on('ready', async () => {
       console.log("Boss channel is not found! Fix your config.");
       bot.destroy();
   }
+  client.query('CREATE TABLE player (name VARCHAR(50), id VARCHAR(30), avatar VARCHAR(65000));');
+  client.query('CREATE TABLE boss01 (name VARCHAR(50), boss CHAR(1), hitted BOOLEAN);');
+  client.query('CREATE TABLE boss02 (name VARCHAR(50), boss CHAR(1), hitted BOOLEAN);');
 
-  bossMessageID = await fetchBossMessage();
-  console.log(bossMessageID);
+  bossMessageID = await fetchBossMessage().id;
+  console.log("Boss message ID: "+bossMessageID);
 });
 
 function fetchBossChannel(){
@@ -52,7 +48,8 @@ function fetchBossChannel(){
 async function fetchBossMessage(){
   let bossChannel = fetchBossChannel();
   let messages = await bossChannel.messages.fetchPinned();
-  return messages.first().id;
+  let bossMessage = await bossChannel.messages.fetch(messages.filter(message => message.author === bot.user).first().id,true,true);
+  return bossMessage;
 }
 
 async function sendBossMessage(){
@@ -91,7 +88,7 @@ async function sendBossMessage(){
       await newMessage.react("🇪");
       await newMessage.react("🇫");
       await newMessage.react("🇬");
-      bossMessageID = await fetchBossMessage().id;
+      bossMessageID = newMessage.id;
   })  
   
 }
@@ -228,7 +225,6 @@ bot.on('messageReactionRemove', async (reaction, user) => {
     await client.query('COMMIT');
   }
   catch(error){
-    reaction.users.remove(user);
     client.query('ROLLBACK');
   }
 });
@@ -266,7 +262,7 @@ bot.on('message',async (msg) => {
       timetable[5] = ["G","A","B","C"];
       timetable[6] = ["D","E","F","G"];
       
-      let weekday = ['日','一','二','三','四','五','六'];
+      const weekday = ['日','一','二','三','四','五','六'];
 
       let today = new Date();
       let weekIndex = today.getDay();
