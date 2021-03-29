@@ -88,7 +88,7 @@ async function sendBossMessage(){
       await newMessage.react("🇬");
       bossMessageID = newMessage.id;
   })  
-  
+  client.query('TRUNCATE TABLE player,boss01,boss02;');
 }
 
 function mapEmojiToLetter(emoji){
