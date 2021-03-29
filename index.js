@@ -122,6 +122,35 @@ function mapEmojiToLetter(emoji){
   }
 }
 
+function mapLetterToEmoji(letter){
+  switch(letter){
+    case 'A':{
+      return '🇦';
+    }
+    case 'B':{
+      return '🇧';
+    }
+    case 'C':{
+      return '🇨';
+    }
+    case 'D':{
+      return '🇩';
+    }
+    case 'E':{
+      return '🇪';
+    }
+    case 'F':{
+      return '🇫';
+    }
+    case 'G':{
+      return '🇬';
+    }
+    default:{
+      return -1;
+    }
+  }
+}
+
 const bossReactions = ['🇦','🇧','🇨','🇩','🇪','🇫','🇬'];
 
 bot.on('messageReactionAdd', async (reaction, user) => {
@@ -225,6 +254,56 @@ bot.on('message', msg => {
        .setDescription(bot.ws.ping+'ms')
        msg.channel.send(embed);
       break;
+    }
+    case "addboss":{
+      command = command.split(' ');
+      command.shift();
+      const regex = new RegExp('[A-G]');
+
+      let firstBoss = command.shift();
+      let secondBoss = command.shift();
+
+      if(regex.test(firstBoss)&&regex.test(secondBoss)){
+        msg.react(mapLetterToEmoji(firstBoss));
+        msg.react(mapLetterToEmoji(secondBoss));
+
+        let name = msg.author.username;
+        let avatar = msg.author.avatarURL();
+
+        const exists = `EXISTS (SELECT FROM player WHERE name = '${name}')`;
+        const insertPlayer = `INSERT INTO player (name,id,avatar) VALUES ('${name}','${msg.author.id}','${avatar}')`;
+        const insertBoss1 = `INSERT INTO boss01 (name,boss,hitted) VALUES ('${name}','${firstBoss}','false')`;
+        const insertBoss2 = `INSERT INTO boss02 (name,boss,hitted) VALUES ('${name}','${secondBoss}','false')`;
+
+        const query = `
+                        DO $$
+                        BEGIN 
+                        IF (${exists}) THEN
+                          RAISE EXCEPTION '${name} already exist!';
+                        ELSE
+                          ${insertPlayer};
+                          ${insertBoss1};
+                          ${insertBoss2};
+                        END IF;
+                        END $$;
+                      `;
+        try{
+          await client.query('BEGIN');
+          await client.query(query);
+          await client.query('COMMIT');
+          msg.react('✔️');
+        }
+        catch(error){
+          msg.react('❌');
+          msg.channel.send(msg.author.username+' 已經存在!');
+          client.query('ROLLBACK');
+        }
+
+      }
+      else{
+        msg.channel.send('這不是正確的輸入!');
+        msg.react('❌');
+      }
     }  
   }
 });
@@ -357,7 +436,7 @@ app.post('/delete-players', async (req, response) => {  //delete records
       await client.query('BEGIN');
       await client.query(query);
       await client.query('COMMIT');
-      response.status(200).send(JSON.stringify(`${name} is deleted!`));
+      response.status(200).send(`${name} is deleted!`);
     }
     catch(error){
       response.status(409).send(error.message);
@@ -368,5 +447,5 @@ app.post('/delete-players', async (req, response) => {  //delete records
 
 
 app.listen(process.env.PORT || 3000,()=>{
-  
+    console.log('working');
 });
