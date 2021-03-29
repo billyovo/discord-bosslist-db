@@ -233,7 +233,7 @@ bot.on('messageReactionRemove', async (reaction, user) => {
   }
 });
 
-bot.on('message', msg => {
+bot.on('message',async (msg) => {
 
   if(!msg.content.startsWith(PREFIX)){return;}
   if(msg.author.bot){return;}
@@ -299,11 +299,11 @@ bot.on('message', msg => {
           client.query('ROLLBACK');
         }
 
-      }
-      else{
-        msg.channel.send('這不是正確的輸入!');
-        msg.react('❌');
-      }
+        }
+        else{
+          msg.channel.send('這不是正確的輸入!');
+          msg.react('❌');
+        }
     }  
   }
 });
