@@ -33,9 +33,6 @@ bot.on('ready', async () => {
       console.log("Boss channel is not found! Fix your config.");
       bot.destroy();
   }
-  client.query('CREATE TABLE player (name VARCHAR(50), id VARCHAR(30), avatar VARCHAR(65000));');
-  client.query('CREATE TABLE boss01 (name VARCHAR(50), boss CHAR(1), hitted BOOLEAN);');
-  client.query('CREATE TABLE boss02 (name VARCHAR(50), boss CHAR(1), hitted BOOLEAN);');
 
   bossMessageID = await fetchBossMessage().id;
   console.log("Boss message ID: "+bossMessageID);
