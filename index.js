@@ -35,7 +35,7 @@ bot.on('ready', async () => {
   }
 
   bossMessageID = await fetchBossMessage();
-  console.log(bossMessageID);
+  bossMessageID = bossMessageID.id;
   console.log("Boss message ID: "+bossMessageID);
 });
 
