@@ -315,7 +315,7 @@ app.patch('/players', async (req, response) => { //update records
                     DO $$
                     BEGIN 
                     IF (${exists}) THEN
-                      RAISE EXCEPTION '${name} is not found!';
+                      RAISE EXCEPTION '${name} with ${boss} is not found!';
                     ELSE
                       ${updateBoss1};
                       ${updateBoss2};
