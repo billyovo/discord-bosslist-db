@@ -306,17 +306,17 @@ app.post('/players', async (req, response) => {      //add records
 
 
 app.patch('/players', (req, response) => { //update records
-  let responseArray = [];
+    let name = req.body.name.trim();
+    let boss = req.body.boss.trim();
 
-    req.body.forEach((element) => {
-    const exists = `NOT EXISTS (SELECT FROM player WHERE name = '${element.name}')`;
-    const updateBoss1 = `UPDATE boss01 SET boss = '${element.bossTo}' WHERE name = '${element.name}' AND boss = '${element.bossFrom}'`;
-    const updateBoss2 = `UPDATE boss02 SET boss = '${element.bossTo}' WHERE name = '${element.name}' AND boss = '${element.bossFrom}'`;
+    const exists = `NOT ( EXISTS (SELECT FROM boss01 WHERE name = '${name}' AND boss = '${boss}') OR EXISTS (SELECT FROM boss02 WHERE name = '${name}' AND boss = '${boss}'))`;
+    const updateBoss1 = `UPDATE boss01 SET hitted = !hitted WHERE name = '${name}' AND boss = '${boss}'`;
+    const updateBoss2 = `UPDATE boss02 SET hitted = !hitted WHERE name = '${name}' AND boss = '${boss}'`;
     const query = `
                     DO $$
                     BEGIN 
                     IF (${exists}) THEN
-                      RAISE EXCEPTION '${element.name} is not found!';
+                      RAISE EXCEPTION '${name} is not found!';
                     ELSE
                       ${updateBoss1};
                       ${updateBoss2};
@@ -327,22 +327,17 @@ app.patch('/players', (req, response) => { //update records
       client.query('BEGIN');
       client.query(query);
       client.query('COMMIT');
-      responseArray.push({message: `${element.name} is updated`, status: '200'});
+      response.status(200).send(`Updated ${name}`);
     }
     catch(error){
-      responseArray.push({message: `${error.message}`, status: '409'});
+      response.status(409).send(error.message);
       client.query('ROLLBACK');
     }
-  });
-
-  response.status(200).send(JSON.stringify(responseArray));
 })
 
 app.post('/delete-players', (req, response) => {  //delete records
-  let responseArray = [];
 
-  req.body.forEach( (element) => {
-    let name = element.name.trim();
+    let name = req.body.name.trim();
     const exists = `NOT EXISTS (SELECT FROM player WHERE name = '${name}')`;
     const removePlayer = `DELETE FROM player WHERE name = '${name}'`;
     const removeBoss1 = `DELETE FROM boss01 WHERE name = '${name}'`;
@@ -363,17 +358,12 @@ app.post('/delete-players', (req, response) => {  //delete records
       client.query('BEGIN');
       client.query(query);
       client.query('COMMIT');
-      responseArray.push({message: `${name} is deleted!`, status: '200'});
+      response.status(200).send(JSON.stringify(`${name} is deleted!`));
     }
     catch(error){
-      responseArray.push({message: `${error.message}`, status: '409'});
+      response.status(409).send(error.message);
       client.query('ROLLBACK');
     }
-  });
-
-  response.status(200).send(JSON.stringify(responseArray));
-  
-
 })
 
 
