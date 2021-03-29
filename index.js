@@ -238,8 +238,8 @@ bot.on('message',async (msg) => {
   if(!msg.content.startsWith(PREFIX)){return;}
   if(msg.author.bot){return;}
 
-  let command = msg.content.slice(prefix_len,msg.content.length).toLowerCase();
-    
+  let raw = msg.content.slice(prefix_len,msg.content.length).toLowerCase();
+  let command = raw.split(' ')[0];
   switch(command){
     case "message":{
       msg.member.hasPermission('ADMINISTRATOR') ?
@@ -304,16 +304,14 @@ bot.on('message',async (msg) => {
 
     }
     case "addboss":{
-      console.log('hi');
-      command = command.split(' ');
-      command.shift();
+      raw = raw.split(' ');
+      raw.shift();
       const regex = new RegExp('[A-G]');
 
-      let firstBoss = command.shift();
+      let firstBoss = raw.shift();
       firstBoss = firstBoss.toUpperCase();
-      let secondBoss = command.shift();
+      let secondBoss = raw.shift();
       secondBoss = secondBoss.toUpperCase();
-      console.log(firstBoss+' '+secondBoss);
       if(regex.test(firstBoss)&&regex.test(secondBoss)){
         msg.react(mapLetterToEmoji(firstBoss));
         msg.react(mapLetterToEmoji(secondBoss));
