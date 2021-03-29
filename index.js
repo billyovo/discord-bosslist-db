@@ -304,6 +304,7 @@ bot.on('message',async (msg) => {
 
     }
     case "addboss":{
+      console.log('hi');
       command = command.split(' ');
       command.shift();
       const regex = new RegExp('[A-G]');
@@ -312,7 +313,7 @@ bot.on('message',async (msg) => {
       firstBoss = firstBoss.toUpperCase();
       let secondBoss = command.shift();
       secondBoss = secondBoss.toUpperCase();
-
+      console.log(firstBoss+' '+secondBoss);
       if(regex.test(firstBoss)&&regex.test(secondBoss)){
         msg.react(mapLetterToEmoji(firstBoss));
         msg.react(mapLetterToEmoji(secondBoss));
