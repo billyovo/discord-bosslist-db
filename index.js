@@ -301,11 +301,10 @@ app.post('/players', async (req, response) => {      //add records
     response.status(409).send(error.message);
     client.query('ROLLBACK');
   }
+});
 
-  });
 
-
-app.patch('/players', (req, response) => { //update records
+app.patch('/players', async (req, response) => { //update records
     let name = req.body.name.trim();
     let boss = req.body.boss.trim();
 
@@ -324,9 +323,9 @@ app.patch('/players', (req, response) => { //update records
                     END $$;
                   `;
     try{
-      client.query('BEGIN');
-      client.query(query);
-      client.query('COMMIT');
+      await client.query('BEGIN');
+      await client.query(query);
+      await client.query('COMMIT');
       response.status(200).send(`Updated ${name}`);
     }
     catch(error){
@@ -335,7 +334,7 @@ app.patch('/players', (req, response) => { //update records
     }
 })
 
-app.post('/delete-players', (req, response) => {  //delete records
+app.post('/delete-players', async (req, response) => {  //delete records
 
     let name = req.body.name.trim();
     const exists = `NOT EXISTS (SELECT FROM player WHERE name = '${name}')`;
@@ -355,9 +354,9 @@ app.post('/delete-players', (req, response) => {  //delete records
                     END $$;
                   `;
     try{
-      client.query('BEGIN');
-      client.query(query);
-      client.query('COMMIT');
+      await client.query('BEGIN');
+      await client.query(query);
+      await client.query('COMMIT');
       response.status(200).send(JSON.stringify(`${name} is deleted!`));
     }
     catch(error){
