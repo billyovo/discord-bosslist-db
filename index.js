@@ -280,8 +280,8 @@ bot.on('message',async (msg) => {
         F: [],
         G: [],
       }
-      let rows = await client.query('SELECT player.*, boss01.boss AS boss1, boss01.hitted AS hitted1, boss02.boss AS boss2, boss02.hitted AS hitted2 FROM player INNER JOIN boss01 ON player.name = boss01.name INNER JOIN boss02 ON player.name = boss02.name;')
-      rows.forEach(element=>{
+      let res = await client.query('SELECT player.*, boss01.boss AS boss1, boss01.hitted AS hitted1, boss02.boss AS boss2, boss02.hitted AS hitted2 FROM player INNER JOIN boss01 ON player.name = boss01.name INNER JOIN boss02 ON player.name = boss02.name;');
+      res.rows.forEach(element=>{
         result[element.boss1].push(element.name);
         result[element.boss2].push(element.name);
       })
