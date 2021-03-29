@@ -266,40 +266,42 @@ bot.on('message',async (msg) => {
       timetable[5] = ["G","A","B","C"];
       timetable[6] = ["D","E","F","G"];
       
-      let weekday = new Array(7);
-      weekday[0] = "日";
-      weekday[1] = "一";
-      weekday[2] = "二";
-      weekday[3] = "三";
-      weekday[4] = "四";
-      weekday[5] = "五";
-      weekday[6] = "六";
-      
+      let weekday = ['日','一','二','三','四','五','六'];
+
       let today = new Date();
       let weekIndex = today.getDay();
       
-      fetchEmote()
-      .then(ret => {
-        ret = JSON.parse(ret);
-        const embed = new Discord.MessageEmbed()
-        .setColor('#ffff00')
-        .setTitle('本周的boss:')
-        .addFields(
-          { name: '\u200b', value: '🇦 '+ret.A.join(" ")},
-          { name: '\u200b', value: '🇧 '+ret.B.join(" ")},
-          { name: '\u200b', value: '🇨 '+ret.C.join(" ")},
-          { name: '\u200b', value: '🇩 '+ret.D.join(" ")},
-          { name: '\u200b', value: '🇪 '+ret.E.join(" ")},
-          { name: '\u200b', value: '🇫 '+ret.F.join(" ")},
-          { name: '\u200b', value: '🇬 '+ret.G.join(" ")},
-        )
-        .setTimestamp()
-        .setFooter('星期'+weekday[weekIndex]+'的boss 7:30 '+timetable[weekIndex][0]+' '+timetable[weekIndex][1]+' | 9:30 '+timetable[weekIndex][2]+ ' '+timetable[weekIndex][3], bot.user.avatarURL());
-        msg.channel.send(embed);
+      let result = {
+        A: [],
+        B: [],
+        C: [],
+        D: [],
+        E: [],
+        F: [],
+        G: [],
+      }
+      let rows = await client.query('SELECT player.*, boss01.boss AS boss1, boss01.hitted AS hitted1, boss02.boss AS boss2, boss02.hitted AS hitted2 FROM player INNER JOIN boss01 ON player.name = boss01.name INNER JOIN boss02 ON player.name = boss02.name;')
+      rows.forEach(element=>{
+        result[element.boss1].push(element.name);
+        result[element.boss2].push(element.name);
       })
-      .catch(error=>{
-        console.log(error);
-      })
+
+      const embed = new Discord.MessageEmbed()
+      .setColor('#ffff00')
+      .setTitle('本周的boss:')
+      .addFields(
+        { name: '\u200b', value: '🇦 '+result.A.join(" ")},
+        { name: '\u200b', value: '🇧 '+result.B.join(" ")},
+        { name: '\u200b', value: '🇨 '+result.C.join(" ")},
+        { name: '\u200b', value: '🇩 '+result.D.join(" ")},
+        { name: '\u200b', value: '🇪 '+result.E.join(" ")},
+        { name: '\u200b', value: '🇫 '+result.F.join(" ")},
+        { name: '\u200b', value: '🇬 '+result.G.join(" ")},
+      )
+      .setTimestamp()
+      .setFooter('星期'+weekday[weekIndex]+'的boss 7:30 '+timetable[weekIndex][0]+' '+timetable[weekIndex][1]+' | 9:30 '+timetable[weekIndex][2]+ ' '+timetable[weekIndex][3], bot.user.avatarURL());
+      await msg.channel.send(embed);
+
       break;
 
     }
