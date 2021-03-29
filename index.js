@@ -309,8 +309,8 @@ app.patch('/players', async (req, response) => { //update records
     let boss = req.body.boss.trim();
 
     const exists = `NOT ( EXISTS (SELECT FROM boss01 WHERE name = '${name}' AND boss = '${boss}') OR EXISTS (SELECT FROM boss02 WHERE name = '${name}' AND boss = '${boss}'))`;
-    const updateBoss1 = `UPDATE boss01 SET hitted = !hitted WHERE name = '${name}' AND boss = '${boss}'`;
-    const updateBoss2 = `UPDATE boss02 SET hitted = !hitted WHERE name = '${name}' AND boss = '${boss}'`;
+    const updateBoss1 = `UPDATE boss01 SET hitted = NOT hitted WHERE name = '${name}' AND boss = '${boss}'`;
+    const updateBoss2 = `UPDATE boss02 SET hitted = NOT hitted WHERE name = '${name}' AND boss = '${boss}'`;
     const query = `
                     DO $$
                     BEGIN 
