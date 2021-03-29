@@ -388,7 +388,7 @@ app.head ("/availability", (req, res) => {  //availability or keep awake
 }) 
 
 app.get('/players', (req, response) => {  //get records
-  client.query('SELECT player.*, boss01.boss AS boss1, boss01.hitted AS hitted1, boss02.boss AS boss2, boss02.hitted AS hitted2 FROM player INNER JOIN boss01 ON player.name = boss01.name INNER JOIN boss02 ON player.name = boss02.name;', (err, res) => {
+  client.query('SELECT player.*, boss01.boss AS boss1, boss01.hitted AS hitted1, boss02.boss AS boss2, boss02.hitted AS hitted2 FROM player INNER JOIN boss01 ON player.name = boss01.name INNER JOIN boss02 ON player.name = boss02.name ORDER BY player.name;', (err, res) => {
     if (err){response.sendStatus(500)};
     response.status(200).send(res.rows);
   });
