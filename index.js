@@ -34,7 +34,8 @@ bot.on('ready', async () => {
       bot.destroy();
   }
 
-  bossMessageID = await fetchBossMessage().id;
+  bossMessageID = await fetchBossMessage();
+  console.log(bossMessageID);
   console.log("Boss message ID: "+bossMessageID);
 });
 
