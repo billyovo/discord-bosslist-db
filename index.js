@@ -350,7 +350,37 @@ bot.on('message',async (msg) => {
           msg.react('❌');
         }
       break;
-    }  
+    } 
+    case "removeboss":{
+      let name = req.body.name.trim();
+      const exists = `NOT EXISTS (SELECT FROM player WHERE name = '${msg.author.username}')`;
+      const removePlayer = `DELETE FROM player WHERE name = '${msg.author.username}'`;
+      const removeBoss1 = `DELETE FROM boss01 WHERE name = '${msg.author.username}'`;
+      const removeBoss2 = `DELETE FROM boss02 WHERE name = '${msg.author.username}'`;
+      const query = `
+                    DO $$
+                    BEGIN 
+                    IF (${exists}) THEN
+                      RAISE EXCEPTION '${msg.author.username} is not found!';
+                    ELSE
+                      ${removePlayer};
+                      ${removeBoss1};
+                      ${removeBoss2};
+                    END IF;
+                    END $$;
+                  `;
+      try{
+        await client.query('BEGIN');
+        await client.query(query);
+        await client.query('COMMIT');
+        msg.react('✔️');
+      }
+      catch(error){
+        msg.react('❌');
+        msg.channel.send('並沒有'+msg.author.username+'這個人!');
+        client.query('ROLLBACK');
+      } 
+    }
   }
 });
 
