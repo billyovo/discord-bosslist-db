@@ -352,7 +352,6 @@ bot.on('message',async (msg) => {
       break;
     } 
     case "removeboss":{
-      let name = req.body.name.trim();
       const exists = `NOT EXISTS (SELECT FROM player WHERE name = '${msg.author.username}')`;
       const removePlayer = `DELETE FROM player WHERE name = '${msg.author.username}'`;
       const removeBoss1 = `DELETE FROM boss01 WHERE name = '${msg.author.username}'`;
