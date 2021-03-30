@@ -37,7 +37,6 @@ bot.on('ready', async () => {
   bossMessageID = await fetchBossMessage();
   bossMessageID = bossMessageID.id;
   console.log("Boss message ID: "+bossMessageID);
-  client.query('ALTER TABLE player ALTER COLUMN avatar TYPE TEXT;');
 });
 
 function fetchBossChannel(){
