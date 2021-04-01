@@ -155,7 +155,7 @@ bot.on('messageReactionAdd', async (reaction, user) => {
 
   const hasSecondBoss = `EXISTS (SELECT FROM boss02 WHERE name = '${user.username}')`;
   const hasFirstBoss = `EXISTS (SELECT FROM boss01 WHERE name = '${user.username}')`;
-  const insertPlayer = `INSERT INTO player (name,id,avatar) VALUES('${user.username}','${user.id}','${user.avatarURL()}')`;
+  const insertPlayer = `INSERT INTO player (name,id,avatar) VALUES('${user.username}','${user.id}','${user.avatarURL({size:64})}')`;
   const insertFirstBoss = `INSERT INTO boss01 (name,boss,hitted) VALUES('${user.username}','${mapEmojiToLetter(reaction.emoji.name)}','false')`;
   const insertSecondBoss = `INSERT INTO boss02 (name,boss,hitted) VALUES('${user.username}','${mapEmojiToLetter(reaction.emoji.name)}','false')`;
   const query = `
@@ -313,7 +313,7 @@ bot.on('message',async (msg) => {
         msg.react(mapLetterToEmoji(secondBoss));
 
         let name = msg.author.username;
-        let avatar = msg.author.avatarURL();
+        let avatar = msg.author.avatarURL({size:64});
 
         const exists = `EXISTS (SELECT FROM player WHERE name = '${name}')`;
         const insertPlayer = `INSERT INTO player (name,id,avatar) VALUES ('${name}','${msg.author.id}','${avatar}')`;
