@@ -408,7 +408,7 @@ app.use(bodyParser.json());
 app.all('/*', (req, res, next) => {
   res.header("Access-Control-Allow-Origin", process.env.ACCESS_ORIGIN);
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  res.header("Access-Control-Allow-Methods","GET, HEAD, POST, PATCH");
+  res.header("Access-Control-Allow-Methods","GET, HEAD, POST, PATCH, DELETE");
   next();
 });
 
