@@ -489,9 +489,9 @@ app.patch('/players', async (req, response) => { //update records
     }
 })
 
-app.post('/delete-players', async (req, response) => {  //delete records
+app.delete('/players/:name', async (req, response) => {  //delete records
 
-    let name = req.body.name.trim();
+    let name = req.params.name.trim();
     const exists = `NOT EXISTS (SELECT FROM player WHERE name = '${name}')`;
     const removePlayer = `DELETE FROM player WHERE name = '${name}'`;
     const removeBoss1 = `DELETE FROM boss01 WHERE name = '${name}'`;
