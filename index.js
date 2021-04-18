@@ -53,10 +53,6 @@ async function fetchBossMessage(){
 async function sendBossMessage(){
   let bossChannel = fetchBossChannel();
   let oldBossMessage = await fetchBossMessage();
-  bossChannel.send("@everyone")
-  .then((message)=>{
-    message.delete();
-  })
 
   const embed = new Discord.MessageEmbed()
   .setColor('#ffff00')
@@ -76,7 +72,7 @@ async function sendBossMessage(){
   .setFooter('新的一周快樂', bot.user.avatarURL());
 
   await oldBossMessage.unpin();
-  await bossChannel.send(embed)
+  await bossChannel.send('@everyone',embed)
   .then(async(newMessage)=>{
       await newMessage.pin();
       await newMessage.react("🇦");
